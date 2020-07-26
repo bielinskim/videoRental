@@ -9,11 +9,11 @@
             "clients": "showClientsList",
             "rents": "showRentsList",
 
-
             "movie/:id": "showMovieDetails",
             "actor/:id": "showActorDetails",
             "category/:id": "showCategoryDetails",
             "client/:id": "showClientDetails",
+            "rent/:id": "showRentDetails",
 
             "movie/:id/edit": "showMovieEdit",
             "actor/:id/edit": "showActorEdit",
@@ -150,6 +150,17 @@
             client.fetch();
 
             APP.Views.Navigation.highlight("clients");
+
+        },
+        showRentDetails: function (id) {
+            var rent = new APP.Models.Rent({ _id: id }),
+                view = new APP.Views.RentDetails({ model: rent });
+
+            APP.showMainView(view);
+
+            rent.fetch();
+
+            APP.Views.Navigation.highlight("rents");
 
         },
         showMovieEdit: function (id) {

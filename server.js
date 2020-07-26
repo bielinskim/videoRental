@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const port = 8000;
 var bodyParser = require("body-parser");
+var async = require("async");
 var mongo = require("mongodb");
 var MongoClient = mongo.MongoClient;
 dbUrl = "mongodb://localhost:27017/videoRental";
@@ -128,6 +129,93 @@ app.get("/categories", function (req, res) {
             res.json(docs);
 
 
+
+        });
+    });
+});
+
+app.get("/rents", function (req, res) {
+
+    var limit = parseInt(req.query.limit);
+
+    MongoClient.connect(dbUrl, function (err, database) {
+
+        if (err) {
+            res.status(500);
+            res.json({ error: true });
+
+            return;
+        }
+
+        const db = database.db('videoRental');
+        db.collection('rents').find({}, { limit: limit }).toArray(function (err, docs) {
+
+            if (err) {
+                res.status(500);
+                res.json({ error: true });
+
+                return;
+            }
+
+            async.each(docs, function (doc, eachCallback) {
+
+
+                async.parallel([function (callback) {
+                    db.collection("movies").findOne({ _id: new mongo.ObjectID(doc.movie_id) }, {fields: { title: 1}}, function (err, movie) {
+
+                        if (err) {
+                            res.status(500);
+                            res.json({ error: true });
+
+                            return;
+                        }
+                        delete doc.movie_id;
+                        doc.movie_title = movie.title;
+
+                        callback();
+
+                    });
+                },
+                function (callback) {
+
+                    db.collection("clients").findOne({ _id: new mongo.ObjectID(doc.client_id) }, {fields: { first_name: 1, last_name: 1}}, function (err, client) {
+
+                        if (err) {
+                            res.status(500);
+                            res.json({ error: true });
+
+                            return;
+                        }
+                        delete doc.client_id;
+                        doc.client_name = client.first_name + " " + client.last_name;
+
+                        callback();
+
+                    });
+
+                }], function (err) {
+                    if (err) {
+                        eachCallback(err);
+
+                        return;
+                    }
+                    eachCallback();
+
+                });
+
+
+            }, function (err) {
+
+                if (err) {
+                    res.status(500);
+                    res.json({ error: true });
+
+                    return;
+                }
+
+                res.json(docs);
+
+            });
 
         });
     });

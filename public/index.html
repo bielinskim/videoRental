@@ -155,6 +155,20 @@
         </span>
     </li>
 </script>
+    <script id="rentListItemTemplate" type="text/template">
+        <li>
+        <span class="title"><%= movie_title %></span>
+                        <span class="client">
+                            <i class="fa fa-user"></i><%= client_name %>
+                        </span>
+                        <span class="date">
+                            <i class="fa fa-calendar"></i><%= date %>
+                        </span>
+                        <span class="btn-rounded details">
+                            <i class="fa fa-search"></i>
+                        </span>
+                    </li>
+</script>
     <script id="movieDetailsTemplate" type="text/template">
     <h3 class="app-heading"><i class="fa fa-info"></i> Szczegóły filmu</h3>
 
@@ -205,6 +219,16 @@
             <button type="button" class="btn edit">Edytuj</button>
         </div>
         </script>
+    <script id="rentDetailsTemplate" type="text/template">
+        <h3 class="app-heading"><i class="fa fa-info"></i> Szczegóły wypożyczenia</h3>
+
+        <div class="app-item-info">
+            <p><span>Film:</span> <%= movie_title %> </p>
+            <p><span>Klient:</span> <%= client_name %> </p>
+            <p><span>Data:</span> <%= date %> </p>
+
+            <button type="button" class="btn edit">Edytuj</button>
+            </script>
     <script id="movieEditNewViewTemplate" type="text/template">
         <% if(this.model.isNew()) { %>
             <h3 class="app-heading"><i class="fa fa-plus"></i> Nowy film</h3>
@@ -386,7 +410,7 @@
     <script src="js/Views/ClientsListView.js"></script>
 
     <script src="js/Models/RentModels.js"></script>
-    <script src="js/Collections//RentsListCollection.js"></script>
+    <script src="js/Collections/RentsListCollection.js"></script>
     <script src="js/Views/RentListItemView.js"></script>
     <script src="js/Views/RentsListView.js"></script>
 
@@ -394,6 +418,7 @@
     <script src="js/Views/ActorDetailsView.js"></script>
     <script src="js/Views/CategoryDetailsView.js"></script>
     <script src="js/Views/ClientDetailsView.js"></script>
+    <script src="js/Views/RentDetailsView.js"></script>
 
     <script src="js/Views/MovieEditView.js"></script>
     <script src="js/Views/ActorEditView.js"></script>
