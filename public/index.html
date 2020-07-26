@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>VideoRental</title>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Droid+Sans:400,700">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="app-wrapper">
+
+        <div class="app-sidebar">
+
+            <div class="app-logo">
+                <a href="/">
+                    <img src="images/logo.png" alt="">
+                </a>
+            </div>
+
+            <div class="app-sidebar-sep">
+                <i class="fa fa-ellipsis-h"></i>
+            </div>
+
+            <div class="app-sidebar-nav">
+                <a href="/movies" class="active" pushstate-link data-id='video-tabs'>
+                    <i class="fa fa-play-circle-o"></i>
+                    Baza filmów
+                </a>
+
+                <div class="app-sidebar-sep">
+                    <i class="fa fa-ellipsis-h"></i>
+                </div>
+
+                <a href="/rents" pushstate-link data-id='rental-tabs'>
+                    <i class="fa fa-calendar"></i>
+                    Wypożyczalnia
+                </a>
+            </div>
+
+        </div>
+
+        <div class="app-main">
+
+            <div class="app-header">
+
+                <div class="app-breadcrumbs">
+                    <span class="app-status-item">Kokpit</span>
+                    <span class="app-status-item">Filmy</span>
+                </div>
+
+                <div class="app-status">
+                    <span class="app-status-item"><i class="fa fa-film"></i> Filmów <strong>50</strong></span>
+                    <span class="app-status-item"><i class="fa fa-thumbs-o-up"></i> Wypożyczeń
+                        <strong>12</strong></span>
+                    <span class="app-status-item"><i class="fa fa-user"></i> Klientów <strong>6</strong></span>
+                </div>
+
+            </div>
+
+            <div class="app-main-tabs active" id="video-tabs">
+                <a href="/movies" class="active" pushstate-link>
+                    <i class="fa fa-film"></i>
+                    Filmy
+                </a>
+                <a href="/actors" pushstate-link>
+                    <i class="fa fa-users"></i>
+                    Aktorzy
+                </a>
+                <a href="/categories" pushstate-link>
+                    <i class="fa fa-list-ol"></i>
+                    Kategorie
+                </a>
+            </div>
+
+            <div class="app-main-tabs" id="rental-tabs">
+                <a href="/rents" pushstate-link>
+                    <i class="fa fa-thumbs-o-up"></i>
+                    Wypożyczenia
+                </a>
+                <a href="/clients" pushstate-link>
+                    <i class="fa fa-user"></i>
+                    Klienci
+                </a>
+            </div>
+
+            <div class="app-content-wrapper">
+
+                <div class="app-content">
+                </div>
+
+                <div class="app-content-sidebar">
+                    <h3>
+                        <i class="fa fa-thumbs-o-up"></i>
+                        Ostatnie wypożyczenia
+                    </h3>
+
+                    <ul class="app-latest-rents">
+                        <li>
+                            <span class="client">Maciej Nowak</span>
+                            <span class="movie">Przeminęło z wiatrem 2</span>
+                            <span class="date">34 minuty temu</span>
+                        </li>
+                        <li>
+                            <span class="client">Jan Kowalski</span>
+                            <span class="movie">Przeminęło z wiatrem 3</span>
+                            <span class="date">godzinę temu</span>
+                        </li>
+                        <li>
+                            <span class="client">Alicja Kowalczyk</span>
+                            <span class="movie">Przeminęło z wiatrem</span>
+                            <span class="date">Wczoraj, 10:20</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div><!-- /.app-wrapper -->
+
+    <script id="movieListItemTemplate" type="text/template">
+    <li>
+        <span class="title"><%= title %></span>
+        <span class="btn-rounded details">
+            <i class="fa fa-search"></i>
+        </span>
+    </li>
+</script>
+    <script id="actorListItemTemplate" type="text/template">
+    <li>
+        <span class="name"><%= name %></span>
+        <span class="btn-rounded details">
+            <i class="fa fa-search"></i>
+        </span>
+    </li>
+</script>
+    <script id="categoryListItemTemplate" type="text/template">
+    <li>
+        <span class="name"><%= name %></span>
+        <span class="btn-rounded details">
+            <i class="fa fa-search"></i>
+        </span>
+    </li>
+</script>
+    <script id="clientListItemTemplate" type="text/template">
+    <li>
+        <span class="name"><%= first_name %> <%= last_name %></span>
+        <span class="btn-rounded details">
+            <i class="fa fa-search"></i>
+        </span>
+    </li>
+</script>
+    <script id="movieDetailsTemplate" type="text/template">
+    <h3 class="app-heading"><i class="fa fa-info"></i> Szczegóły filmu</h3>
+
+    <div class="app-item-info">
+        <p><span>Tytuł:</span><%= title %></p>
+        <p><span>Data wydania:</span><%= date %></p>
+        <p><span>Kategorie:</span><%= categories.join(", ") %></p>
+        <p><span>Aktorzy:</span><%= actors.join(", ") %></p>
+        <p><span>Opis:</span> <i><%= description %></i></p>
+        <p><span>Ilość płyt:</span><%= quantity %></p>
+        <p><span>Wypożyczonych:</span> 5</p>
+        <p><span>Dostępny:</span> tak</p>
+
+        <button type="button" class="btn edit">Edytuj</button>
+    </div>
+    </script>
+    <script id="actorDetailsTemplate" type="text/template">
+        <h3 class="app-heading"><i class="fa fa-info"></i> Szczegóły aktora</h3>
+    
+        <div class="app-item-info">
+            <p><span>Imię i nazwisko:</span><%= name %></p>
+    
+            <button type="button" class="btn edit">Edytuj</button>
+        </div>
+        </script>
+    <script id="categoryDetailsTemplate" type="text/template">
+            <h3 class="app-heading"><i class="fa fa-info"></i> Szczegóły kategorii</h3>
+        
+            <div class="app-item-info">
+                <p><span>Nazwa:</span><%= name %></p>
+        
+                <button type="button" class="btn edit">Edytuj</button>
+            </div>
+            </script>
+    </script>
+    <script id="clientDetailsTemplate" type="text/template">
+        <h3 class="app-heading"><i class="fa fa-info"></i> Szczegóły klienta</h3>
+    
+        <div class="app-item-info">
+            <p><span>Imię:</span><%= first_name %></p>
+            <p><span>Nazwisko:</span><%= last_name %></p>
+            <p><span>Data urodzenia:</span><%= birthdate %></p>
+            <p><span>Number dowodu:</span><%= idc_number %></p>
+            <p><span>Adres:</span> <i><%= address %></i></p>
+            <p><span>Kod pocztowy:</span><%= zip_code %></p>
+            <p><span>Miasto:</span><%= city %></p>
+    
+            <button type="button" class="btn edit">Edytuj</button>
+        </div>
+        </script>
+    <script id="movieEditNewViewTemplate" type="text/template">
+        <% if(this.model.isNew()) { %>
+            <h3 class="app-heading"><i class="fa fa-plus"></i> Nowy film</h3>
+        <% } else { %>
+            <h3 class="app-heading"><i class="fa fa-edit"></i> Edycja filmu</h3>
+            <% } %>
+                <div class="app-form">
+                    <form action="" id="new-movie">
+                        <div class="app-form-field">
+                            <label for="movie-title">Tytuł</label>
+                            <input type="text" id="movie-title" value="">
+                        </div>
+
+                        <div class="app-form-field">
+                            <label for="movie-date">Data</label>
+                            <input type="text" id="movie-date" class="short" placeholder="dd-mm-rrrr">
+                        </div>
+
+                        <div class="app-form-field">
+                            <label for="ms-movie-categories">Kategorie</label>
+                            <input type="text" class="medium" id="ms-movie-categories" placeholder="Wybierz kategorie">
+                        </div>
+
+                        <div class="app-form-field">
+                            <label for="ms-movie-actors">Aktorzy</label>
+                            <input type="text" class="medium" id="ms-movie-actors" placeholder="Wybierz aktorów">
+                        </div>
+
+                        <div class="app-form-field">
+                            <label for="movie-description">Opis</label>
+                            <textarea id="movie-description"></textarea>
+                        </div>
+
+                        <div class="app-form-field">
+                            <label for="movie-quantity">Ilość</label>
+                            <input type="text" id="movie-quantity" class="short" placeholder="20">
+                        </div>
+
+                        <div class="app-form-submit">
+                            <button type="submit" class="btn">Zapisz</button>
+                            <% if(!this.model.isNew()) { %>
+                                <button type="button" class="btn special delete">Usuń</button>
+                            <% } %>
+                            
+                        </div>
+                    </form>
+                </div>
+            </script>
+    <script id="actorEditNewViewTemplate" type="text/template">
+        <% if(this.model.isNew()) { %>
+            <h3 class="app-heading"><i class="fa fa-plus"></i> Nowy aktor</h3>
+        <% } else { %>
+            <h3 class="app-heading"><i class="fa fa-edit"></i> Edycja aktora</h3>
+            <% } %>
+                
+        
+                        <div class="app-form">
+                            <form action="" id="new-actor">
+                                <div class="app-form-field">
+                                    <label for="actor-name">Nazwa</label>
+                                    <input type="text" id="actor-name" value="">
+                                </div>
+        
+        
+                                <div class="app-form-submit">
+                                    <button type="submit" class="btn">Zapisz</button>
+                                    <% if(!this.model.isNew()) { %>
+                                        <button type="button" class="btn special delete">Usuń</button>
+                                    <% } %>
+                                </div>
+                            </form>
+                        </div>
+                    </script>
+    <script id="categoryEditNewViewTemplate" type="text/template">
+        <% if(this.model.isNew()) { %>
+            <h3 class="app-heading"><i class="fa fa-plus"></i> Nowa kategoria</h3>
+        <% } else { %>
+            <h3 class="app-heading"><i class="fa fa-edit"></i> Edycja kategorii</h3>
+            <% } %>
+                                <div class="app-form">
+                                    <form action="" id="new-category">
+                                        <div class="app-form-field">
+                                            <label for="category-name">Nazwa</label>
+                                            <input type="text" id="category-name" value="">
+                                        </div>
+                
+                
+                                        <div class="app-form-submit">
+                                            <button type="submit" class="btn">Zapisz</button>
+                                            <% if(!this.model.isNew()) { %>
+                                                <button type="button" class="btn special delete">Usuń</button>
+                                            <% } %>
+                                        </div>
+                                    </form>
+                                </div>
+                            </script>
+    <script id="clientEditNewViewTemplate" type="text/template">
+        <% if(this.model.isNew()) { %>
+            <h3 class="app-heading"><i class="fa fa-plus"></i> Nowy klient</h3>
+        <% } else { %>
+            <h3 class="app-heading"><i class="fa fa-edit"></i> Edycja klienta</h3>
+            <% } %>
+                                        <div class="app-form">
+                                            <form action="" id="new-movie">
+                                                <div class="app-form-field">
+                                                    <label for="client-first-name">Imię</label>
+                                                    <input type="text" id="client-first-name" value="" placeholder="Imię">
+                                                </div>
+                        
+                                                <div class="app-form-field">
+                                                    <label for="client-last-name">Nazwisko</label>
+                                                    <input type="text" id="client-last-name" class="short" placeholder="Nazwisko">
+                                                </div>
+                        
+                                                <div class="app-form-field">
+                                                    <label for="client-birthdate">Data urodzenia</label>
+                                                    <input type="text" class="medium" id="client-birthdate" placeholder="Data urodzenia">
+                                                </div>
+                        
+                                                <div class="app-form-field">
+                                                    <label for="client-idc-number">Numer dowodu</label>
+                                                    <input type="text" class="medium" id="client-idc-number" placeholder="Numer dowodu">
+                                                </div>
+                        
+                                                <div class="app-form-field">
+                                                    <label for="client-address">Adres</label>
+                                                    <input type="text" class="medium" id="client-address" placeholder="Adres">
+                                                </div>
+                        
+                                                <div class="app-form-field">
+                                                    <label for="client-zip-code">Kod pocztowy</label>
+                                                    <input type="text" class="medium" id="client-zip-code" placeholder="Kod pocztowy">
+                                                </div>
+
+                                                <div class="app-form-field">
+                                                    <label for="client-city">Miasto</label>
+                                                    <input type="text" class="medium" id="client-city" placeholder="Miasto">
+                                                </div>
+                        
+                                                <div class="app-form-submit">
+                                                    <button type="submit" class="btn">Zapisz</button>
+                                                    <% if(!this.model.isNew()) { %>
+                                                        <button type="button" class="btn special delete">Usuń</button>
+                                                    <% } %>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </script>
+    <script src="js/libs/jquery.js"></script>
+    <script src="js/libs/underscore.js"></script>
+    <script src="js/libs/backbone.js"></script>
+    <script src="js/libs/backbone.stickit.js"></script>
+    <script src="js/libs/pushstate-links.js"></script>
+    <script src="js/libs/magicsuggest.js"></script>
+    <script src="js/libs/beatpicker.js"></script>
+
+    <script src="js/Setup.js"></script>
+
+    <script src="js/Views/Navigation.js"></script>
+
+    <script src="js/Models/MovieModels.js"></script>
+    <script src="js/Collections//MoviesListCollection.js"></script>
+    <script src="js/Views/MovieListItemView.js"></script>
+    <script src="js/Views/MoviesListView.js"></script>
+
+    <script src="js/Models/ActorModels.js"></script>
+    <script src="js/Collections//ActorsListCollection.js"></script>
+    <script src="js/Views/ActorListItemView.js"></script>
+    <script src="js/Views/ActorsListView.js"></script>
+
+    <script src="js/Models/CategoryModels.js"></script>
+    <script src="js/Collections//CategoriesListCollection.js"></script>
+    <script src="js/Views/CategoryListItemView.js"></script>
+    <script src="js/Views/CategoriesListView.js"></script>
+
+    <script src="js/Models/ClientModels.js"></script>
+    <script src="js/Collections//ClientsListCollection.js"></script>
+    <script src="js/Views/ClientListItemView.js"></script>
+    <script src="js/Views/ClientsListView.js"></script>
+
+    <script src="js/Models/RentModels.js"></script>
+    <script src="js/Collections//RentsListCollection.js"></script>
+    <script src="js/Views/RentListItemView.js"></script>
+    <script src="js/Views/RentsListView.js"></script>
+
+    <script src="js/Views/MovieDetailsView.js"></script>
+    <script src="js/Views/ActorDetailsView.js"></script>
+    <script src="js/Views/CategoryDetailsView.js"></script>
+    <script src="js/Views/ClientDetailsView.js"></script>
+
+    <script src="js/Views/MovieEditView.js"></script>
+    <script src="js/Views/ActorEditView.js"></script>
+    <script src="js/Views/CategoryEditView.js"></script>
+    <script src="js/Views/ClientEditView.js"></script>
+
+    <script src="js/Views/MovieNewView.js"></script>
+    <script src="js/Views/ActorNewView.js"></script>
+    <script src="js/Views/CategoryNewView.js"></script>
+    <script src="js/Views/ClientNewView.js"></script>
+
+    <script src="js/Routers/Router.js"></script>
+
+    <script src="js/App.js"></script>
+
+</body>
+
+</html>
