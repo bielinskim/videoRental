@@ -14,7 +14,9 @@ app.get('/', (req, res) => res.sendfile('index.html'));
 
 app.get("/movies", function (req, res) {
 
-    var limit = parseInt(req.query.limit);
+    var limit = parseInt(req.query.limit),
+        name = req.query.name,
+        regex = new RegExp(name, "ig");
 
     MongoClient.connect(dbUrl, function (err, database) {
 
@@ -26,7 +28,7 @@ app.get("/movies", function (req, res) {
         }
 
         const db = database.db('videoRental');
-        db.collection('movies').find({}, { limit: limit }).toArray(function (err, docs) {
+        db.collection('movies').find({title: regex}, { limit: limit }).toArray(function (err, docs) {
 
             if (err) {
                 res.status(500);
@@ -74,7 +76,9 @@ app.get("/actors", function (req, res) {
 
 app.get("/clients", function (req, res) {
 
-    var limit = parseInt(req.query.limit);
+    var limit = parseInt(req.query.limit),
+        name = req.query.name,
+        regex = new RegExp(name, "ig");
 
     MongoClient.connect(dbUrl, function (err, database) {
 
@@ -86,7 +90,7 @@ app.get("/clients", function (req, res) {
         }
 
         const db = database.db('videoRental');
-        db.collection('clients').find({}, { limit: limit }).toArray(function (err, docs) {
+        db.collection('clients').find({$or: [{first_name: regex}, {last_name: regex}]}, { limit: limit }).toArray(function (err, docs) {
 
             if (err) {
                 res.status(500);
@@ -94,6 +98,13 @@ app.get("/clients", function (req, res) {
 
                 return;
             }
+
+            docs.forEach(function(doc) {
+                doc.name = doc.first_name + " " + doc.last_name;
+
+                delete doc.first_name;
+                delete doc.last_name;
+            })
 
             res.json(docs);
 
@@ -247,9 +258,24 @@ app.get("/movie/:id", function (req, res) {
                 return;
             }
 
+            var movie = docs[0];
 
-            res.json(docs[0]);
+            db.collection("rents").count({movie_id: id}, function(err, count) {
 
+                if (err) {
+                    res.status(500);
+                    res.json({ error: true });
+    
+                    return;
+                }
+
+                movie.rent_number = count;
+
+                movie.available = count < movie.quantity;
+
+                res.json(movie);
+
+            });
 
         });
 
@@ -351,6 +377,82 @@ app.get("/client/:id", function (req, res) {
             }
 
             res.json(docs[0]);
+
+        });
+
+    });
+
+});
+
+app.get("/rent/:id", function (req, res) {
+
+    var id = req.params.id
+    isValid = mongo.ObjectID.isValid(id);
+
+
+    if (!isValid) {
+        res.status(500);
+        res.json({ error: true });
+
+        return;
+    }
+
+    MongoClient.connect(dbUrl, function (err, database) {
+
+        const db = database.db('videoRental');
+
+        db.collection("rents").findOne({ _id: new mongo.ObjectID(id) }, function (err, doc) {
+
+            if (err) {
+                res.status(500);
+                res.json({ error: true });
+
+                return;
+            }
+
+
+            async.parallel([function (callback) {
+                db.collection("movies").findOne({ _id: new mongo.ObjectID(doc.movie_id) }, {fields: { title: 1}}, function (err, movie) {
+
+                    if (err) {
+                        res.status(500);
+                        res.json({ error: true });
+
+                        return;
+                    }
+                    doc.movie_title = movie.title;
+
+                    callback();
+
+                });
+            },
+            function (callback) {
+
+                db.collection("clients").findOne({ _id: new mongo.ObjectID(doc.client_id) }, {fields: { first_name: 1, last_name: 1}}, function (err, client) {
+
+                    if (err) {
+                        res.status(500);
+                        res.json({ error: true });
+
+                        return;
+                    }
+                    doc.client_name = client.first_name + " " + client.last_name;
+
+                    callback();
+
+                });
+
+            }], function (err) {
+                if (err) {
+                    res.status(500);
+                    res.json({ error: true });
+
+                    return;
+                }
+                res.json(doc);
+
+            });
+
 
         });
 
@@ -505,6 +607,42 @@ app.put("/client/:id", function (req, res) {
     });
 });
 
+app.put("/rent/:id", function (req, res) {
+
+    var id = req.params.id
+    isValid = mongo.ObjectID.isValid(id);
+
+
+    if (!isValid) {
+        res.status(500);
+        res.json({ error: true });
+
+        return;
+    }
+
+    MongoClient.connect(dbUrl, function (err, database) {
+
+        const db = database.db('videoRental');
+
+        delete req.body._id;
+
+        db.collection("rents").findAndModify({ _id: new mongo.ObjectID(id) }, {}, { $set: req.body }, { new: true }, function (err, doc) {
+
+            if (err) {
+                res.status(500);
+                res.json({ error: true });
+
+                return;
+            }
+
+
+            res.json(doc);
+
+        });
+
+    });
+});
+
 app.post("/movies", function (req, res) {
 
     MongoClient.connect(dbUrl, function (err, database) {
@@ -583,6 +721,31 @@ app.post("/clients", function (req, res) {
 
 
         db.collection("clients").insert(req.body, function (err, doc) {
+
+            if (err) {
+                res.status(500);
+                res.json({ error: true });
+
+                return;
+            }
+
+            res.json(doc.ops[0]);
+
+
+        });
+
+    });
+});
+
+app.post("/rents", function (req, res) {
+
+    MongoClient.connect(dbUrl, function (err, database) {
+
+        const db = database.db('videoRental');
+
+        req.body.date = new Date();
+
+        db.collection("rents").insert(req.body, function (err, doc) {
 
             if (err) {
                 res.status(500);
@@ -734,5 +897,41 @@ app.delete("/client/:id", function (req, res) {
 
     });
 });
+
+app.delete("/rent/:id", function (req, res) {
+
+    var id = req.params.id
+    isValid = mongo.ObjectID.isValid(id);
+
+
+    if (!isValid) {
+        res.status(500);
+        res.json({ error: true });
+
+        return;
+    }
+
+    MongoClient.connect(dbUrl, function (err, database) {
+
+        const db = database.db('videoRental');
+
+        db.collection("rents").findAndRemove({ _id: new mongo.ObjectID(id) }, function (err, doc) {
+
+            if (err) {
+                res.status(500);
+                res.json({ error: true });
+
+                return;
+            }
+
+
+            res.json({ deleted: true });
+
+        });
+
+    });
+});
+
+
 
 app.listen(port, () => console.log('Serwer aktywny!!'));

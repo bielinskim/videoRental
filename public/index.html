@@ -149,7 +149,7 @@
 </script>
     <script id="clientListItemTemplate" type="text/template">
     <li>
-        <span class="name"><%= first_name %> <%= last_name %></span>
+        <span class="name"><%= name %></span>
         <span class="btn-rounded details">
             <i class="fa fa-search"></i>
         </span>
@@ -179,8 +179,8 @@
         <p><span>Aktorzy:</span><%= actors.join(", ") %></p>
         <p><span>Opis:</span> <i><%= description %></i></p>
         <p><span>Ilość płyt:</span><%= quantity %></p>
-        <p><span>Wypożyczonych:</span> 5</p>
-        <p><span>Dostępny:</span> tak</p>
+        <p><span>Wypożyczonych:</span> <%= rent_number %> </p>
+        <p><span>Dostępny:</span> <% available ? print("tak") : print("nie") %> </p>
 
         <button type="button" class="btn edit">Edytuj</button>
     </div>
@@ -377,6 +377,33 @@
                                             </form>
                                         </div>
                                     </script>
+    <script id="rentEditNewViewTemplate" type="text/template">
+                <% if(this.model.isNew()) { %>
+                    <h3 class="app-heading"><i class="fa fa-plus"></i> Nowe wypożyczenie</h3>
+                <% } else { %>
+                    <h3 class="app-heading"><i class="fa fa-edit"></i> Edycja wypożyczenia</h3>
+                    <% } %>
+                    <div class="app-form">
+                        <form action="" id="new-rent">
+                            <div class="app-form-field">
+                                <label for="ms-movie-id">Film</label>
+                                <input type="text" class="medium" id="ms-movie-id" placeholder="Wybierz film">
+                            </div>
+    
+                            <div class="app-form-field">
+                                <label for="ms-client-id">Klient</label>
+                                <input type="text" class="medium" id="ms-client-id" placeholder="Wybierz klienta">
+                            </div>
+    
+                            <div class="app-form-submit">
+                                <button type="submit" class="btn">Zapisz</button>
+                                <% if(!this.model.isNew()) { %>
+                                    <button type="button" class="btn special delete">Zwróć</button>
+                                <% } %>
+                            </div>
+                        </form>
+                    </div>
+    </script>
     <script src="js/libs/jquery.js"></script>
     <script src="js/libs/underscore.js"></script>
     <script src="js/libs/backbone.js"></script>
@@ -424,11 +451,13 @@
     <script src="js/Views/ActorEditView.js"></script>
     <script src="js/Views/CategoryEditView.js"></script>
     <script src="js/Views/ClientEditView.js"></script>
+    <script src="js/Views/RentEditView.js"></script>
 
     <script src="js/Views/MovieNewView.js"></script>
     <script src="js/Views/ActorNewView.js"></script>
     <script src="js/Views/CategoryNewView.js"></script>
     <script src="js/Views/ClientNewView.js"></script>
+    <script src="js/Views/RentNewView.js"></script>
 
     <script src="js/Routers/Router.js"></script>
 

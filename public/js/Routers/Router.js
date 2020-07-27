@@ -19,11 +19,13 @@
             "actor/:id/edit": "showActorEdit",
             "category/:id/edit": "showCategoryEdit",
             "client/:id/edit": "showClientEdit",
+            "rent/:id/edit": "showRentEdit",
 
             "movies/new": "showMovieNew",
             "actors/new": "showActorNew",
             "categories/new": "showCategoryNew",
-            "clients/new": "showClientsNew"
+            "clients/new": "showClientsNew",
+            "rents/new": "showRentsNew"
 
         },
 
@@ -207,6 +209,17 @@
             APP.Views.Navigation.highlight("clients");
 
         },
+        showRentEdit: function (id) {
+            var rent = new APP.Models.Rent({ _id: id }),
+                view = new APP.Views.RentEdit({ model: rent });
+
+            APP.showMainView(view);
+
+            rent.fetch();
+
+            APP.Views.Navigation.highlight("rents");
+
+        },
         showMovieNew: function () {
             var movie = new APP.Models.Movie(),
                 view = new APP.Views.MovieNew({ model: movie });
@@ -241,6 +254,15 @@
             APP.showMainView(view);
 
             APP.Views.Navigation.highlight("clients");
+
+        },
+        showRentsNew: function () {
+            var rent = new APP.Models.Rent(),
+                view = new APP.Views.RentNew({ model: rent });
+
+            APP.showMainView(view);
+
+            APP.Views.Navigation.highlight("rents");
 
         },
     });

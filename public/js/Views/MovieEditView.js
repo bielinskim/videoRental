@@ -110,6 +110,10 @@
 
             e.preventDefault();
 
+            this.model.unset("rent_number");
+
+            this.model.unset("available");
+
             this.model.save({}, { wait: true });
         },
         deleteMovie: function () {
