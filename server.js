@@ -15,6 +15,8 @@ app.get('/', (req, res) => res.sendfile('index.html'));
 app.get("/movies", function (req, res) {
 
     var limit = parseInt(req.query.limit),
+        skip = parseInt(req.query.skip),
+        order = parseInt(req.query.order),
         name = req.query.name,
         regex = new RegExp(name, "ig");
 
@@ -28,7 +30,7 @@ app.get("/movies", function (req, res) {
         }
 
         const db = database.db('videoRental');
-        db.collection('movies').find({title: regex}, { limit: limit }).toArray(function (err, docs) {
+        db.collection('movies').find({title: regex}, { limit: limit, skip: skip, sort: {title: order || 1}}).toArray(function (err, docs) {
 
             if (err) {
                 res.status(500);
@@ -46,6 +48,8 @@ app.get("/movies", function (req, res) {
 app.get("/actors", function (req, res) {
 
     var limit = parseInt(req.query.limit),
+        skip = parseInt(req.query.skip),
+        order = parseInt(req.query.order),
         name = req.query.name,
         regex = new RegExp(name, "ig");
 
@@ -59,7 +63,7 @@ app.get("/actors", function (req, res) {
         }
 
         const db = database.db('videoRental');
-        db.collection('actors').find({ name: regex }, { limit: limit }).toArray(function (err, docs) {
+        db.collection('actors').find({ name: regex }, { limit: limit, skip: skip, sort: {name: order || 1} }).toArray(function (err, docs) {
 
             if (err) {
                 res.status(500);
@@ -77,6 +81,8 @@ app.get("/actors", function (req, res) {
 app.get("/clients", function (req, res) {
 
     var limit = parseInt(req.query.limit),
+        skip = parseInt(req.query.skip),
+        order = parseInt(req.query.order),
         name = req.query.name,
         regex = new RegExp(name, "ig");
 
@@ -90,7 +96,7 @@ app.get("/clients", function (req, res) {
         }
 
         const db = database.db('videoRental');
-        db.collection('clients').find({$or: [{first_name: regex}, {last_name: regex}]}, { limit: limit }).toArray(function (err, docs) {
+        db.collection('clients').find({$or: [{first_name: regex}, {last_name: regex}]}, { limit: limit, skip: skip, sort: {first_name: order || 1} }).toArray(function (err, docs) {
 
             if (err) {
                 res.status(500);
@@ -116,6 +122,7 @@ app.get("/clients", function (req, res) {
 app.get("/categories", function (req, res) {
 
     var name = req.query.name,
+        order = parseInt(req.query.order),
         regex = new RegExp(name, "ig");
 
     MongoClient.connect(dbUrl, function (err, database) {
@@ -128,7 +135,7 @@ app.get("/categories", function (req, res) {
         }
 
         const db = database.db('videoRental');
-        db.collection('categories').find({ name: regex }).toArray(function (err, docs) {
+        db.collection('categories').find({ name: regex }, {sort: {name: order || 1}}).toArray(function (err, docs) {
 
             if (err) {
                 res.status(500);
@@ -147,7 +154,9 @@ app.get("/categories", function (req, res) {
 
 app.get("/rents", function (req, res) {
 
-    var limit = parseInt(req.query.limit);
+    var limit = parseInt(req.query.limit),
+        order = parseInt(req.query.order),
+        skip = parseInt(req.query.skip);
 
     MongoClient.connect(dbUrl, function (err, database) {
 
@@ -159,7 +168,7 @@ app.get("/rents", function (req, res) {
         }
 
         const db = database.db('videoRental');
-        db.collection('rents').find({}, { limit: limit }).toArray(function (err, docs) {
+        db.collection('rents').find({}, { limit: limit, skip: skip, sort: {date: order || 1} }).toArray(function (err, docs) {
 
             if (err) {
                 res.status(500);
@@ -198,7 +207,12 @@ app.get("/rents", function (req, res) {
                             return;
                         }
                         delete doc.client_id;
-                        doc.client_name = client.first_name + " " + client.last_name;
+                        if(client && client.first_name && client.last_name) {
+                            doc.client_name = client.first_name + " " + client.last_name;
+                        }
+                        else {
+                            doc.client_name = "null" + " " + "null";
+                        }
 
                         callback();
 
@@ -932,6 +946,47 @@ app.delete("/rent/:id", function (req, res) {
     });
 });
 
+app.get("/info/:colname", function(req, res) {
+
+    var availableNames = ["movies", "actors", "categories", "rents", "clients"],
+        colname = req.params.colname;
+
+        if(availableNames.indexOf(colname) === -1) {
+            res.status(500);
+            res.json({ error: true });
+
+            return;
+        }
+
+        MongoClient.connect(dbUrl, function (err, database) {
+
+            const db = database.db('videoRental');
+
+            if(err) {
+                res.status(500);
+                res.json({ error: true });
+
+                return;
+            }
+
+            db.collection(colname).count({}, function(err, count) {
+
+                if(err) {
+                    res.status(500);
+                    res.json({ error: true });
+
+                    return;
+                }
+
+                res.status(200);
+                res.set("Content-Type", "text/plain");
+                res.send(String(count));
+
+        });
+
+    });
+
+});
 
 
 app.listen(port, () => console.log('Serwer aktywny!!'));

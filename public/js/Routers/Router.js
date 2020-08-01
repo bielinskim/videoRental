@@ -4,10 +4,11 @@
 
         routes: {
             "": "showMoviesList",
-            "movies": "showMoviesList",
-            "actors": "showActorsList",
-            "clients": "showClientsList",
-            "rents": "showRentsList",
+            "movies(/page/:page)(/order/:order)(/search/:search)": "showMoviesList",
+            "actors(/page/:page)(/order/:order)": "showActorsList",
+            "categories(/page/:page)(/order/:order)": "showCategoriesList",
+            "clients(/page/:page)(/order/:order)": "showClientsList",
+            "rents(/page/:page)(/order/:order)": "showRentsList",
 
             "movie/:id": "showMovieDetails",
             "actor/:id": "showActorDetails",
@@ -29,80 +30,124 @@
 
         },
 
-        showMoviesList: function () {
+        showMoviesList: function (page, order, search) {
 
+            var page = page || 1,
+                skip = (page - 1) * 5,
+                order = order || 1,
+                search = search || "";
             var movies = new APP.Collections.MoviesList();
-            var view = new APP.Views.MoviesList({ collection: movies });
+            var view = new APP.Views.MoviesList({ 
+                collection: movies,
+                page: page,
+                order: order,
+             });
 
             APP.showMainView(view);
 
             movies.fetch({
                 reset: true,
                 data: {
-                    limit: 5
+                    limit: 5,
+                    skip : skip,
+                    order: order,
+                    name: search
                 }
             });
 
             APP.Views.Navigation.highlight("movies");
 
         },
-        showActorsList: function () {
+        showActorsList: function (page, order) {
+            var page = page || 1,
+                skip = (page - 1) * 5,
+                order = order || 1;
             var actors = new APP.Collections.ActorsList();
-            var view = new APP.Views.ActorsList({ collection: actors });
+            var view = new APP.Views.ActorsList({ 
+                collection: actors, 
+                page: page,
+                order: order
+            });
 
             APP.showMainView(view);
 
             actors.fetch({
                 reset: true,
                 data: {
-                    limit: 5
+                    limit: 5,
+                    skip : skip,
+                    order: order
                 }
             });
 
             APP.Views.Navigation.highlight("actors");
         },
-        showClientsList: function () {
+        showClientsList: function (page, order) {
+            var page = page || 1,
+                skip = (page - 1) * 5,
+                order = order || 1;
             var clients = new APP.Collections.ClientsList();
-            var view = new APP.Views.ClientsList({ collection: clients });
+            var view = new APP.Views.ClientsList({ 
+                collection: clients, 
+                page: page,
+                order: order 
+            });
 
             APP.showMainView(view);
 
             clients.fetch({
                 reset: true,
                 data: {
-                    limit: 5
+                    limit: 5,
+                    skip : skip,
+                    order: order
                 }
             });
 
             APP.Views.Navigation.highlight("clients");
         },
-        showCategoriesList: function () {
+        showCategoriesList: function (page, order) {
+            var page = page || 1,
+                skip = (page - 1) * 5,
+                order = order || 1;
             var categories = new APP.Collections.CategoriesList();
-            var view = new APP.Views.CategoriesList({ collection: categories });
+            var view = new APP.Views.CategoriesList({ 
+                collection: categories,
+                page: page,
+                order: order 
+            });
 
             APP.showMainView(view);
 
             categories.fetch({
                 reset: true,
                 data: {
-                    limit: 5
+                    order: order
                 }
             });
 
             APP.Views.Navigation.highlight("categories");
         },
 
-        showRentsList: function () {
-
+        showRentsList: function (page, order) {
+            var page = page || 1,
+                skip = (page - 1) * 5,
+                order = order || 1;
             var rents = new APP.Collections.RentsList();
-            var view = new APP.Views.RentsList({ collection: rents });
+            var view = new APP.Views.RentsList({ 
+                collection: rents,
+                page: page,
+                order: order
+            });
 
             APP.showMainView(view);
 
             rents.fetch({
                 reset: true,
                 data: {
-                    limit: 5
+                    limit: 5,
+                    skip : skip,
+                    order: order
                 }
             });
 
