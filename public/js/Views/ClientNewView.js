@@ -8,6 +8,7 @@
         initialize: function () {
 
             this.listenTo(this.model, "sync", this.redirectToEdit);
+            this.listenTo(this.model, "sync", this.showAddedInfo);
             this.listenTo(this.model, 'invalid', this.showErrorInfo);
 
             this.render();
@@ -60,9 +61,20 @@
 
             this.model.save({}, { wait: true });
         },
+        showAddedInfo: function(model) {
+
+            var zd = new $.Zebra_Dialog("Rekord został poprawnie zapisany", {
+                type: "information",
+                title: "Zapisano"
+            });
+
+        },
         showErrorInfo: function(model) {
 
-            alert(model.validationError);
+            var zd = new $.Zebra_Dialog(model.validationError, {
+                type: "error",
+                title: "Wystąpił błąd"
+            });
 
         },
         redirectToEdit: function () {

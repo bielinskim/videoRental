@@ -9,7 +9,9 @@
 
             this.listenToOnce(this.model, 'change', this.render);
             this.listenToOnce(this.model, 'destroy', this.redirectToRents);
+            this.listenToOnce(this.model, 'destroy', this.showRemoveInfo);
             this.listenTo(this.model, 'invalid', this.showErrorInfo);
+            this.listenTo(this.model, 'update', this.showUpdateInfo);
 
         },
         render: function () {
@@ -101,16 +103,47 @@
         },
         deleteRent: function () {
 
-            const confirmation = confirm("Czy na pewno chcesz usunac?");
+            var model = this.model;
 
-            if (confirmation) {
-                this.model.destroy({ wait: true });
-            }
+            var zd = new $.Zebra_Dialog("Czy na pewno chcesz usunąć?", {
+                type: "warning",
+                title: "Potwierdzenie usunięcia",
+                buttons: [
+                    {
+                    caption: "Tak",
+                    callback: function() {
+                        model.destroy({wait:true});
+                    }
+                },
+                {
+                    caption: "Anuluj"
+                }
+                ]
+            });
+
+        },
+        showRemoveInfo: function(model) {
+
+            var zd = new $.Zebra_Dialog("Rekord został usunięty", {
+                type: "information",
+                title: "Usunięto"
+            });
 
         },
         showErrorInfo: function(model) {
 
-            alert(model.validationError);
+            var zd = new $.Zebra_Dialog(model.validationError, {
+                type: "error",
+                title: "Wystąpił błąd"
+            });
+
+        },
+        showUpdateInfo: function(model) {
+
+            var zd = new $.Zebra_Dialog("Aktualizacja przebiegła pomyślnie", {
+                type: "information",
+                title: "Zaktualizowano"
+            });
 
         },
         redirectToRents: function () {
