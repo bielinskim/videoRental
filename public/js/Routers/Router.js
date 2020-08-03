@@ -5,10 +5,10 @@
         routes: {
             "": "showMoviesList",
             "movies(/page/:page)(/order/:order)(/search/:search)": "showMoviesList",
-            "actors(/page/:page)(/order/:order)": "showActorsList",
-            "categories(/page/:page)(/order/:order)": "showCategoriesList",
-            "clients(/page/:page)(/order/:order)": "showClientsList",
-            "rents(/page/:page)(/order/:order)": "showRentsList",
+            "actors(/page/:page)(/order/:order)(/search/:search)": "showActorsList",
+            "categories(/page/:page)(/order/:order)(/search/:search)": "showCategoriesList",
+            "clients(/page/:page)(/order/:order)(/search/:search)": "showClientsList",
+            "rents(/page/:page)(/order/:order)(/search/:search)": "showRentsList",
 
             "movie/:id": "showMovieDetails",
             "actor/:id": "showActorDetails",
@@ -41,6 +41,7 @@
                 collection: movies,
                 page: page,
                 order: order,
+                search: search
              });
 
             APP.showMainView(view);
@@ -58,7 +59,7 @@
             APP.Views.Navigation.highlight("movies");
 
         },
-        showActorsList: function (page, order) {
+        showActorsList: function (page, order, search) {
             var page = page || 1,
                 skip = (page - 1) * 5,
                 order = order || 1;
@@ -66,7 +67,8 @@
             var view = new APP.Views.ActorsList({ 
                 collection: actors, 
                 page: page,
-                order: order
+                order: order,
+                search: search
             });
 
             APP.showMainView(view);
@@ -76,13 +78,14 @@
                 data: {
                     limit: 5,
                     skip : skip,
-                    order: order
+                    order: order,
+                    name: search
                 }
             });
 
             APP.Views.Navigation.highlight("actors");
         },
-        showClientsList: function (page, order) {
+        showClientsList: function (page, order, search) {
             var page = page || 1,
                 skip = (page - 1) * 5,
                 order = order || 1;
@@ -90,7 +93,8 @@
             var view = new APP.Views.ClientsList({ 
                 collection: clients, 
                 page: page,
-                order: order 
+                order: order,
+                search: search
             });
 
             APP.showMainView(view);
@@ -100,13 +104,14 @@
                 data: {
                     limit: 5,
                     skip : skip,
-                    order: order
+                    order: order,
+                    name: search
                 }
             });
 
             APP.Views.Navigation.highlight("clients");
         },
-        showCategoriesList: function (page, order) {
+        showCategoriesList: function (page, order, search) {
             var page = page || 1,
                 skip = (page - 1) * 5,
                 order = order || 1;
@@ -114,7 +119,8 @@
             var view = new APP.Views.CategoriesList({ 
                 collection: categories,
                 page: page,
-                order: order 
+                order: order,
+                search: search 
             });
 
             APP.showMainView(view);
@@ -122,14 +128,15 @@
             categories.fetch({
                 reset: true,
                 data: {
-                    order: order
+                    order: order,
+                    name: search
                 }
             });
 
             APP.Views.Navigation.highlight("categories");
         },
 
-        showRentsList: function (page, order) {
+        showRentsList: function (page, order, search) {
             var page = page || 1,
                 skip = (page - 1) * 5,
                 order = order || 1;
@@ -137,7 +144,8 @@
             var view = new APP.Views.RentsList({ 
                 collection: rents,
                 page: page,
-                order: order
+                order: order,
+                search: search
             });
 
             APP.showMainView(view);
@@ -147,7 +155,8 @@
                 data: {
                     limit: 5,
                     skip : skip,
-                    order: order
+                    order: order,
+                    name: search
                 }
             });
 

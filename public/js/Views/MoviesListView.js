@@ -19,14 +19,17 @@
             var paginationView = new APP.Views.ListPagination({
                 collectionName: "movies",
                 page: this.options.page,
-                order: this.options.order
+                order: this.options.order,
+                search: this.options.search
 
             });
 
             var actionsView = new APP.Views.ListActions({
                 collectionName: "movies",
                 page: this.options.page,
-                order: this.options.order
+                order: this.options.order,
+                search: this.options.search,
+                placeholder: "Szukaj filmów..."
             });
 
             this.childViews = [actionsView, paginationView];

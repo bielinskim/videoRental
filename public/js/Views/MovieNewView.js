@@ -8,6 +8,7 @@
         initialize: function () {
 
             this.listenTo(this.model, "sync", this.redirectToEdit);
+            this.listenTo(this.model, 'invalid', this.showErrorInfo);
 
             this.render();
 
@@ -104,6 +105,11 @@
             e.preventDefault();
 
             this.model.save({}, { wait: true });
+        },
+        showErrorInfo: function(model) {
+
+            alert(model.validationError);
+
         },
         redirectToEdit: function () {
 

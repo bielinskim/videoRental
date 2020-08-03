@@ -14,7 +14,10 @@
             $.ajax({
                 
                 url: "/info/" + this.options.collectionName,
-                context: this
+                context: this,
+                data: {
+                    name: this.options.search || undefined
+                }
 
             }).done(function(items){
                 if(items > 5) {
@@ -48,6 +51,10 @@
 
             var page = $(e.target).data("page"),
                 url = this.options.collectionName + "/page/" + page + "/order/" + this.options.order;
+
+            if(this.options.search) {
+                url += "/search/" + this.options.search;
+            }
 
 
             APP.router.navigate(url, {trigger:true});

@@ -20,7 +20,9 @@
             var actionsView = new APP.Views.ListActions({
                 collectionName: "categories",
                 page: this.options.page,
-                order: this.options.order
+                order: this.options.order,
+                search: this.options.search,
+                placeholder: "Szukaj kategorii..."
             });
 
             this.childViews = [actionsView];

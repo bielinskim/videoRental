@@ -9,6 +9,7 @@
 
             this.listenToOnce(this.model, 'change', this.render);
             this.listenToOnce(this.model, 'destroy', this.redirectToClients);
+            this.listenTo(this.model, 'invalid', this.showErrorInfo);
 
         },
         render: function () {
@@ -66,6 +67,11 @@
             if (confirmation) {
                 this.model.destroy({ wait: true });
             }
+
+        },
+        showErrorInfo: function(model) {
+
+            alert(model.validationError);
 
         },
         redirectToClients: function () {

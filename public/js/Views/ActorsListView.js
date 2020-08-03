@@ -19,14 +19,17 @@
             var paginationView = new APP.Views.ListPagination({
                 collectionName: "actors",
                 page: this.options.page,
-                order: this.options.order
+                order: this.options.order,
+                search: this.options.search
 
             });
 
             var actionsView = new APP.Views.ListActions({
                 collectionName: "actors",
                 page: this.options.page,
-                order: this.options.order
+                order: this.options.order,
+                search: this.options.search,
+                placeholder: "Szukaj aktorów..."
             });
 
             this.childViews = [actionsView, paginationView];

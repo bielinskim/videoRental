@@ -4,6 +4,18 @@
 
         idAttribute: "_id",
 
+        defaults: {
+            name: ""
+        },
+
+        validate: function(attrs, options) {
+
+            if(attrs.name === "") {
+                return "Musisz podać nazwę kategorii.";
+            }
+
+        },
+
         url: function () {
 
             if (this.isNew()) {

@@ -156,7 +156,9 @@ app.get("/rents", function (req, res) {
 
     var limit = parseInt(req.query.limit),
         order = parseInt(req.query.order),
-        skip = parseInt(req.query.skip);
+        skip = parseInt(req.query.skip),
+        name = req.query.name,
+        regex = new RegExp(name, "ig");
 
     MongoClient.connect(dbUrl, function (err, database) {
 
@@ -238,7 +240,11 @@ app.get("/rents", function (req, res) {
                     return;
                 }
 
-                res.json(docs);
+                var filteredDocs = docs.filter(function(doc) {
+                    return doc.movie_title.match(regex);
+                });
+
+                res.json(filteredDocs);
 
             });
 
@@ -949,7 +955,15 @@ app.delete("/rent/:id", function (req, res) {
 app.get("/info/:colname", function(req, res) {
 
     var availableNames = ["movies", "actors", "categories", "rents", "clients"],
-        colname = req.params.colname;
+        colname = req.params.colname,
+        name = req.query.name,
+        regex = new RegExp(name, "ig")
+        fields = [
+            {first_name: regex},
+            {last_name: regex},
+            {title: regex},
+            {name: regex}
+        ];
 
         if(availableNames.indexOf(colname) === -1) {
             res.status(500);
@@ -969,20 +983,67 @@ app.get("/info/:colname", function(req, res) {
                 return;
             }
 
-            db.collection(colname).count({}, function(err, count) {
+            if(colname == "rents") {
 
-                if(err) {
-                    res.status(500);
-                    res.json({ error: true });
+                db.collection("rents").find({}).toArray(function(err, docs) {
 
-                    return;
-                }
+                    var count = 0;
 
-                res.status(200);
-                res.set("Content-Type", "text/plain");
-                res.send(String(count));
+                    async.each(docs, function(doc, callback) {
 
-        });
+                        var rent = doc;
+
+                        db.collection("movies").findOne({ _id: new mongo.ObjectID(rent.movie_id) }, {fields: { title: 1}}, function (err, doc) {
+
+                            if (err) {
+                                callback(err);
+
+                                return;
+                            }
+                            if(doc.title.match(regex)) {
+                                count++;
+                            }
+    
+                            callback();
+
+                            return;
+    
+                        });
+                    },
+                    function(err) {
+                        
+                        if(err) {
+                            res.status(500);
+                            res.json({error: true});
+                        }
+
+                        res.status(200);
+                        res.set("Content-Type", "text/plain");
+                        res.send(String(count));
+                    });
+
+                });
+
+            } else {
+
+                db.collection(colname).count({$or: fields}, function(err, count) {
+
+                    if(err) {
+                        res.status(500);
+                        res.json({ error: true });
+    
+                        return;
+                    }
+    
+                    res.status(200);
+                    res.set("Content-Type", "text/plain");
+                    res.send(String(count));
+    
+                });
+
+            }
+
+            
 
     });
 

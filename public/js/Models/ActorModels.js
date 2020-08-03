@@ -4,6 +4,18 @@
 
         idAttribute: "_id",
 
+        defaults: {
+            name: ""
+        },
+
+        validate: function(attrs, options) {
+
+            if(attrs.name === "") {
+                return "Musisz podać imię i nazwisko aktora.";
+            }
+
+        },
+
         url: function () {
 
             if (this.isNew()) {

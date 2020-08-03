@@ -4,6 +4,24 @@
 
         idAttribute: "_id",
 
+        defaults: {
+            movie_id: "",
+            client_id: "",
+            date: ""
+        },
+
+        validate: function(attrs, options) {
+
+            if(attrs.movie_id === "") {
+                return "Musisz wybrać film.";
+            }
+
+            if(attrs.client_id === "") {
+                return "Musisz wybrać klienta.";
+            }
+
+        },
+
         url: function () {
 
             if (this.isNew()) {
