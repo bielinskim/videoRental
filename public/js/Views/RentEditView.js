@@ -11,6 +11,7 @@
             this.listenToOnce(this.model, 'destroy', this.redirectToRents);
             this.listenToOnce(this.model, 'destroy', this.showRemoveInfo);
             this.listenToOnce(this.model, "destroy", APP.showStatisticsView);
+            this.listenTo(this.model, "destroy", APP.showLatestRentsView);
             this.listenTo(this.model, 'invalid', this.showErrorInfo);
             this.listenTo(this.model, 'update', this.showUpdateInfo);
             this.listenTo(this.model, "update", APP.showLatestRentsView);

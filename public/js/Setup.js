@@ -70,10 +70,22 @@
 
     };
 
+    APP.showBreadcrumbsView = function() {
+
+        if(APP.ViewsInstances.breadcrumbs) {
+
+            APP.ViewsInstances.breadcrumbs.remove();
+        }
+
+        APP.ViewsInstances.breadcrumbs = new APP.Views.Breadcrumbs();
+
+    };
+
     APP.init = function() {
 
         APP.router = new APP.Routers.Router();
 
+        APP.showBreadcrumbsView();
         APP.showStatisticsView();
         APP.showLatestRentsView();
 

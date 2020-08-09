@@ -46,12 +46,6 @@
         <div class="app-main">
 
             <div class="app-header">
-
-                <div class="app-breadcrumbs">
-                    <span class="app-status-item">Kokpit</span>
-                    <span class="app-status-item">Filmy</span>
-                </div>
-
             </div>
 
             <div class="app-main-tabs active" id="video-tabs">
@@ -93,6 +87,12 @@
         </div>
 
     </div><!-- /.app-wrapper -->
+
+    <script id="breadcrumbsWidgetTemplate" type="text/template">
+        <% for(var i = 0; i < pathItems.length; i++) { %>
+        <span class="app-status-item"><%= pathItems[i] %></span>
+        <% } %>
+    </script>
 
     <script id="statisticsWidgetTemplate" type="text/template">
     <span class="app-status-item"><i class="fa fa-film"></i> Filmów <strong><%= movies %></strong></span>
@@ -484,6 +484,7 @@
     <script src="js/Views/LatestRentsListItemView.js"></script>
     <script src="js/Views/LatestRentsView.js"></script>
     <script src="js/Views/StatisticsView.js"></script>
+    <script src="js/Views/BreadcrumbsView.js"></script>
 
     <script src="js/Routers/Router.js"></script>
 
