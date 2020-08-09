@@ -52,13 +52,6 @@
                     <span class="app-status-item">Filmy</span>
                 </div>
 
-                <div class="app-status">
-                    <span class="app-status-item"><i class="fa fa-film"></i> Filmów <strong>50</strong></span>
-                    <span class="app-status-item"><i class="fa fa-thumbs-o-up"></i> Wypożyczeń
-                        <strong>12</strong></span>
-                    <span class="app-status-item"><i class="fa fa-user"></i> Klientów <strong>6</strong></span>
-                </div>
-
             </div>
 
             <div class="app-main-tabs active" id="video-tabs">
@@ -93,28 +86,6 @@
                 </div>
 
                 <div class="app-content-sidebar">
-                    <h3>
-                        <i class="fa fa-thumbs-o-up"></i>
-                        Ostatnie wypożyczenia
-                    </h3>
-
-                    <ul class="app-latest-rents">
-                        <li>
-                            <span class="client">Maciej Nowak</span>
-                            <span class="movie">Przeminęło z wiatrem 2</span>
-                            <span class="date">34 minuty temu</span>
-                        </li>
-                        <li>
-                            <span class="client">Jan Kowalski</span>
-                            <span class="movie">Przeminęło z wiatrem 3</span>
-                            <span class="date">godzinę temu</span>
-                        </li>
-                        <li>
-                            <span class="client">Alicja Kowalczyk</span>
-                            <span class="movie">Przeminęło z wiatrem</span>
-                            <span class="date">Wczoraj, 10:20</span>
-                        </li>
-                    </ul>
                 </div>
 
             </div>
@@ -123,28 +94,48 @@
 
     </div><!-- /.app-wrapper -->
 
+    <script id="statisticsWidgetTemplate" type="text/template">
+    <span class="app-status-item"><i class="fa fa-film"></i> Filmów <strong><%= movies %></strong></span>
+    <span class="app-status-item"><i class="fa fa-thumbs-o-up"></i> Wypożyczeń<strong><%= rents %></strong></span>
+    <span class="app-status-item"><i class="fa fa-user"></i> Klientów <strong><%= clients %></strong></span>
+    </script>
+
     <script id="listPaginationTemplate" type="text/template">
     <% for(var i = 1; i<= anchors; i ++) { %>
         <a href='#' class='<% i == active ? print("active") : "" %>' data-page="<%= i %>"><%= i %></a>
         <% } %>
     </script>
 
-    <script id="listActionsTemplate" type="text/template">
-    <div class="app-search">
-        <input type="text" placeholder="<%= placeholder %>">
-    </div>
 
-    <span class="btn-rounded active add">
-        <i class="fa fa-plus"></i>
-    </span>
+    <script id="latestRentsWidgetListItemTemplate" type="text/template">
+        <span class="client"><%= client_name %></span>
+        <span class="movie"><%= movie_title %></span>
+        <span class="date"><%= this.formatDateMoment(date) %></span>
+    </script>
+
+    <script id="latestRentsWidgetTemplate" type="text/template">
+        <h3>
+            <i class="fa fa-thumbs-o-up"></i>
+            Ostatnie wypożyczenia
+        </h3>
+    </script>
+
+    <script id="listActionsTemplate" type="text/template">
+        <div class="app-search">
+            <input type="text" placeholder="<%= placeholder %>">
+        </div>
+    
+        <span class="btn-rounded active add">
+            <i class="fa fa-plus"></i>
+        </span>
 
     <ul class="app-sort">
         <% if(order == "1") { %>
-            <li data-order="1">Rosnąco</li>
-            <li data-order="-1">Malejąco</li>
+        <li data-order="1">Rosnąco</li>
+        <li data-order="-1">Malejąco</li>
         <% } else { %>
-            <li data-order="-1">Malejąco</li>
-            <li data-order="1">Rosnąco</li>
+        <li data-order="-1">Malejąco</li>
+        <li data-order="1">Rosnąco</li>
         <% } %>
     </ul>
     </script>
@@ -438,6 +429,8 @@
     <script src="js/libs/magicsuggest.js"></script>
     <script src="js/libs/beatpicker.js"></script>
     <script src="js/libs/zebra-dialog.js"></script>
+    <script src="js/libs/moment.js"></script>
+    <script src="js/libs/moment.pl.js"></script>
 
     <script src="js/Setup.js"></script>
 
@@ -487,6 +480,10 @@
     <script src="js/Views/CategoryNewView.js"></script>
     <script src="js/Views/ClientNewView.js"></script>
     <script src="js/Views/RentNewView.js"></script>
+
+    <script src="js/Views/LatestRentsListItemView.js"></script>
+    <script src="js/Views/LatestRentsView.js"></script>
+    <script src="js/Views/StatisticsView.js"></script>
 
     <script src="js/Routers/Router.js"></script>
 

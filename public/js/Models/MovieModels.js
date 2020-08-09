@@ -19,7 +19,7 @@
                 return "Musisz podać tytuł filmu.";
             }
 
-            if(!attrs.date.match(/^(\d{2}-d{2}-\d{4})$/)) {
+            if(!attrs.date.match(/^(\d{2}-\d{2}-\d{4})$/)) {
                 return "Musisz podać poprawną datę produkcji.";
             }
 

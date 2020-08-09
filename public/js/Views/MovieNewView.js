@@ -7,8 +7,9 @@
 
         initialize: function () {
 
-            this.listenTo(this.model, "sync", this.redirectToEdit);
-            this.listenTo(this.model, "sync", this.showAddedInfo);
+            this.listenToOnce(this.model, "sync", this.redirectToEdit);
+            this.listenToOnce(this.model, "sync", this.showAddedInfo);
+            this.listenToOnce(this.model, "sync", APP.showStatisticsView);
             this.listenTo(this.model, 'invalid', this.showErrorInfo);
 
             this.render();

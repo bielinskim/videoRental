@@ -20,7 +20,7 @@
                 return "Musisz podać imię i nazwisko klienta.";
             }
 
-            if(!attrs.birthdate.match(/^(\d{2}-d{2}-\d{4})$/)) {
+            if(!attrs.birthdate.match(/^(\d{2}-\d{2}-\d{4})$/)) {
                 return "Musisz podać poprawną datę urodzenia.";
             }
 

@@ -10,8 +10,10 @@
             this.listenToOnce(this.model, 'change', this.render);
             this.listenToOnce(this.model, 'destroy', this.redirectToRents);
             this.listenToOnce(this.model, 'destroy', this.showRemoveInfo);
+            this.listenToOnce(this.model, "destroy", APP.showStatisticsView);
             this.listenTo(this.model, 'invalid', this.showErrorInfo);
             this.listenTo(this.model, 'update', this.showUpdateInfo);
+            this.listenTo(this.model, "update", APP.showLatestRentsView);
 
         },
         render: function () {
@@ -99,7 +101,14 @@
             this.model.unset("client_name");
             this.model.unset("date");
 
-            this.model.save({}, { wait: true });
+            var model = this.model;
+
+            this.model.save({}, { 
+                wait: true, 
+                success: function() {
+                    model.trigger("update");
+                } 
+            });
         },
         deleteRent: function () {
 

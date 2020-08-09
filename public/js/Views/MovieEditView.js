@@ -10,6 +10,7 @@
             this.listenToOnce(this.model, 'change', this.render);
             this.listenToOnce(this.model, 'destroy', this.redirectToMovies);
             this.listenToOnce(this.model, 'destroy', this.showRemoveInfo);
+            this.listenToOnce(this.model, "destroy", APP.showStatisticsView);
             this.listenTo(this.model, 'invalid', this.showErrorInfo);
             this.listenTo(this.model, 'update', this.showUpdateInfo);
 

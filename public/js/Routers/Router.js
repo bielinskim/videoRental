@@ -139,7 +139,7 @@
         showRentsList: function (page, order, search) {
             var page = page || 1,
                 skip = (page - 1) * 5,
-                order = order || 1;
+                order = order || -1;
             var rents = new APP.Collections.RentsList();
             var view = new APP.Views.RentsList({ 
                 collection: rents,
