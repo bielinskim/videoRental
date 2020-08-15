@@ -9,11 +9,11 @@
 
             this.listenToOnce(this.model, 'change', this.render);
             this.listenToOnce(this.model, 'destroy', _.bind(APP.Router.redirectToList, this));
-            this.listenToOnce(this.model, 'destroy', this.showRemoveInfo);
             this.listenToOnce(this.model, "destroy", APP.showStatisticsView);
             this.listenTo(this.model, "destroy", APP.showLatestRentsView);
-            this.listenTo(this.model, 'invalid', this.showErrorInfo);
-            this.listenTo(this.model, 'update', this.showUpdateInfo);
+            this.listenToOnce(this.model, 'destroy', APP.Messages.showRemoveInfo);
+            this.listenTo(this.model, 'invalid', _.bind(APP.Messages.showErrorInfo, this));
+            this.listenTo(this.model, 'update', APP.Messages.showUpdateInfo);
             this.listenTo(this.model, "update", APP.showLatestRentsView);
 
             this.delegateEvents({
@@ -98,30 +98,6 @@
         events: {
             "submit form": "updateRent",
             "click .delete": "deleteRent"
-        },
-        showRemoveInfo: function(model) {
-
-            var zd = new $.Zebra_Dialog("Rekord został usunięty", {
-                type: "information",
-                title: "Usunięto"
-            });
-
-        },
-        showErrorInfo: function(model) {
-
-            var zd = new $.Zebra_Dialog(model.validationError, {
-                type: "error",
-                title: "Wystąpił błąd"
-            });
-
-        },
-        showUpdateInfo: function(model) {
-
-            var zd = new $.Zebra_Dialog("Aktualizacja przebiegła pomyślnie", {
-                type: "information",
-                title: "Zaktualizowano"
-            });
-
         },
         redirectToRents: function () {
 

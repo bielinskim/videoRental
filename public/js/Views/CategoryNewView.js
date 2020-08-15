@@ -8,8 +8,8 @@
         initialize: function () {
 
             this.listenTo(this.model, "sync", _.bind(APP.Router.redirectToEdit, this));
-            this.listenTo(this.model, "sync", this.showAddedInfo);
-            this.listenTo(this.model, 'invalid', this.showErrorInfo);
+            this.listenTo(this.model, "sync", APP.Messages.showAddedInfo);
+            this.listenTo(this.model, 'invalid', _.bind(APP.Messages.showErrorInfo, this));
 
             this.delegateEvents({
                 "submit form": _.bind(APP.CRUD.createItem, this)
@@ -30,22 +30,6 @@
         },
         bindings: {
             "#category-name": "name"
-        },
-        showAddedInfo: function(model) {
-
-            var zd = new $.Zebra_Dialog("Rekord został poprawnie zapisany", {
-                type: "information",
-                title: "Zapisano"
-            });
-
-        },
-        showErrorInfo: function(model) {
-
-            var zd = new $.Zebra_Dialog(model.validationError, {
-                type: "error",
-                title: "Wystąpił błąd"
-            });
-
         }
     })
 })();

@@ -9,10 +9,10 @@
 
             this.listenToOnce(this.model, 'change', this.render);
             this.listenToOnce(this.model, 'destroy', _.bind(APP.Router.redirectToList, this));
-            this.listenToOnce(this.model, 'destroy', this.showRemoveInfo);
             this.listenToOnce(this.model, "destroy", APP.showStatisticsView);
-            this.listenTo(this.model, 'invalid', this.showErrorInfo);
-            this.listenTo(this.model, 'update', this.showUpdateInfo);
+            this.listenToOnce(this.model, 'destroy', APP.Messages.showRemoveInfo);
+            this.listenTo(this.model, 'invalid', _.bind(APP.Messages.showErrorInfo, this));
+            this.listenTo(this.model, 'update', APP.Messages.showUpdateInfo);
 
             this.delegateEvents({
                 "submit form": _.bind(APP.CRUD.updateItem, this),
@@ -114,30 +114,6 @@
         events: {
             "submit form": "updateMovie",
             "click .delete": "deleteMovie"
-        },
-        showRemoveInfo: function(model) {
-
-            var zd = new $.Zebra_Dialog("Rekord został usunięty", {
-                type: "information",
-                title: "Usunięto"
-            });
-
-        },
-        showErrorInfo: function(model) {
-
-            var zd = new $.Zebra_Dialog(model.validationError, {
-                type: "error",
-                title: "Wystąpił błąd"
-            });
-
-        },
-        showUpdateInfo: function(model) {
-
-            var zd = new $.Zebra_Dialog("Aktualizacja przebiegła pomyślnie", {
-                type: "information",
-                title: "Zaktualizowano"
-            });
-
         },
         redirectToMovies: function () {
 

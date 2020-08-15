@@ -8,9 +8,9 @@
         initialize: function () {
 
             this.listenTo(this.model, "sync", _.bind(APP.Router.redirectToEdit, this));
-            this.listenToOnce(this.model, "sync", this.showAddedInfo);
             this.listenToOnce(this.model, "sync", APP.showStatisticsView);
-            this.listenTo(this.model, 'invalid', this.showErrorInfo);
+            this.listenTo(this.model, "sync", APP.Messages.showAddedInfo);
+            this.listenTo(this.model, 'invalid', _.bind(APP.Messages.showErrorInfo, this));
 
             this.delegateEvents({
                 "submit form": _.bind(APP.CRUD.createItem, this)
@@ -102,22 +102,6 @@
             "#movie-date": "date",
             "#movie-description": "description",
             "#movie-quantity": "quantity"
-        },
-        showAddedInfo: function(model) {
-
-            var zd = new $.Zebra_Dialog("Rekord został poprawnie zapisany", {
-                type: "information",
-                title: "Zapisano"
-            });
-
-        },
-        showErrorInfo: function(model) {
-
-            var zd = new $.Zebra_Dialog(model.validationError, {
-                type: "error",
-                title: "Wystąpił błąd"
-            });
-
         }
     })
 })();

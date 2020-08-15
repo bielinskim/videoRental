@@ -187,20 +187,8 @@
 
             var model = this.model;
 
-            var zd = new $.Zebra_Dialog("Czy na pewno chcesz usunąć?", {
-                type: "warning",
-                title: "Potwierdzenie usunięcia",
-                buttons: [
-                    {
-                    caption: "Tak",
-                    callback: function() {
-                        model.destroy({wait:true});
-                    }
-                },
-                {
-                    caption: "Anuluj"
-                }
-                ]
+            APP.Messages.showRemovePrompt(function() {
+                model.destroy({wait: true});
             });
 
         },
@@ -279,6 +267,54 @@
             return text.charAt(0).toUpperCase() + text.slice(1);
 
         }
+
+    };
+
+    APP.Messages = {
+
+        displayDialog: function(title, text, type, buttons) {
+
+            return new $.Zebra_Dialog(text, {
+                type: type,
+                title: title,
+                buttons: buttons
+            })
+        },
+        showErrorInfo: function() {
+
+            APP.Messages.displayDialog("Wystąpił błąd", this.model.validationError, "error");
+
+        },
+        showAddedInfo: function() {
+
+            APP.Messages.displayDialog("Zapisano", "Rekord został poprawnie zapisany", "information");
+
+        },
+        showUpdateInfo: function(model) {
+
+            APP.Messages.displayDialog("Zaktualizowano", "Aktualizacja przebiegła pomyślnie", "information");
+
+        },
+        showRemoveInfo: function(model) {
+
+            APP.Messages.displayDialog("Usunięto", "Rekord został usunięty", "information");
+
+        },
+        showRemovePrompt: function (callback) {
+            
+                var buttons = [
+                {
+                    caption: "Tak",
+                    callback: callback
+                },
+                {
+                    caption: "Anuluj"
+                }
+                ];
+
+            APP.Messages.displayDialog("Potwierdzenie usunięcia", "Czy na pewno chcesz usunąć?", "warning", buttons);
+
+        },
 
     }
 

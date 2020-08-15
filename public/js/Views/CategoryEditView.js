@@ -9,9 +9,9 @@
 
             this.listenToOnce(this.model, 'change', this.render);
             this.listenToOnce(this.model, 'destroy', _.bind(APP.Router.redirectToList, this));
-            this.listenToOnce(this.model, 'destroy', this.showRemoveInfo);
-            this.listenTo(this.model, 'invalid', this.showErrorInfo);
-            this.listenTo(this.model, 'update', this.showUpdateInfo);
+            this.listenToOnce(this.model, 'destroy', APP.Messages.showRemoveInfo);
+            this.listenTo(this.model, 'invalid', _.bind(APP.Messages.showErrorInfo, this));
+            this.listenTo(this.model, 'update', APP.Messages.showUpdateInfo);
 
             this.delegateEvents({
                 "submit form": _.bind(APP.CRUD.updateItem, this),
