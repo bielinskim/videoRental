@@ -16,9 +16,9 @@
 
         },
 
-        url: function () {
+        url: function (forceIsNew) {
 
-            if (this.isNew()) {
+            if (this.isNew() || forceIsNew) {
                 return "/actors";
             } else {
                 return "/actor/" + this.get("_id");

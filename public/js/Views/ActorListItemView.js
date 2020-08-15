@@ -6,6 +6,14 @@
 
         template: _.template($("#actorListItemTemplate").html()),
 
+        initialize: function() {
+
+            this.delegateEvents({
+                "click": _.bind(APP.Router.redirectToDetails, this)
+            });
+
+        },
+
         render: function () {
 
             var html = this.template(this.model.toJSON());
@@ -14,13 +22,6 @@
 
             return this;
         },
-        events: {
-            "click .details": "redirectToDetails"
-        },
-        redirectToDetails: function () {
-
-            APP.router.navigate("/actor/" + this.model.get("_id"), { trigger: true })
-        }
 
     });
 

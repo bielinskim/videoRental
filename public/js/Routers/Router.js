@@ -2,323 +2,35 @@
 
     APP.Routers.Router = Backbone.Router.extend({
 
-        routes: {
-            "": "showMoviesList",
-            "movies(/page/:page)(/order/:order)(/search/:search)": "showMoviesList",
-            "actors(/page/:page)(/order/:order)(/search/:search)": "showActorsList",
-            "categories(/page/:page)(/order/:order)(/search/:search)": "showCategoriesList",
-            "clients(/page/:page)(/order/:order)(/search/:search)": "showClientsList",
-            "rents(/page/:page)(/order/:order)(/search/:search)": "showRentsList",
+        initialize: function() {
 
-            "movie/:id": "showMovieDetails",
-            "actor/:id": "showActorDetails",
-            "category/:id": "showCategoryDetails",
-            "client/:id": "showClientDetails",
-            "rent/:id": "showRentDetails",
+            this.route("", "movies-list");
+            this.route("movies(/page/:page)(/order/:order)(/search/:search)", "movies-list");
+            this.route("actors(/page/:page)(/order/:order)(/search/:search)", "actors-list");
+            this.route("categories(/page/:page)(/order/:order)(/search/:search)", "categories-list");
+            this.route("rents(/page/:page)(/order/:order)(/search/:search)", "rents-list");
+            this.route("clients(/page/:page)(/order/:order)(/search/:search)", "clients-list");
 
-            "movie/:id/edit": "showMovieEdit",
-            "actor/:id/edit": "showActorEdit",
-            "category/:id/edit": "showCategoryEdit",
-            "client/:id/edit": "showClientEdit",
-            "rent/:id/edit": "showRentEdit",
+            this.route("movie/:id", "movie-details");
+            this.route("actor/:id", "actor-details");
+            this.route("category/:id", "category-details");
+            this.route("rent/:id", "rent-details");
+            this.route("client/:id", "client-details");
 
-            "movies/new": "showMovieNew",
-            "actors/new": "showActorNew",
-            "categories/new": "showCategoryNew",
-            "clients/new": "showClientsNew",
-            "rents/new": "showRentsNew"
+            this.route("movie/:id/edit", "movie-edit");
+            this.route("actor/:id/edit", "actor-edit");
+            this.route("category/:id/edit", "category-edit");
+            this.route("rent/:id/edit", "rent-edit");
+            this.route("client/:id/edit", "client-edit");
 
+            this.route("movies/new", "movie-new");
+            this.route("actors/new", "actor-new");
+            this.route("categories/new", "category-new");
+            this.route("rents/new", "rent-new");
+            this.route("clients/new", "client-new");
+        
         },
 
-        showMoviesList: function (page, order, search) {
-
-            var page = page || 1,
-                skip = (page - 1) * 5,
-                order = order || 1,
-                search = search || "";
-            var movies = new APP.Collections.MoviesList();
-            var view = new APP.Views.MoviesList({ 
-                collection: movies,
-                page: page,
-                order: order,
-                search: search
-             });
-
-            APP.showMainView(view);
-
-            movies.fetch({
-                reset: true,
-                data: {
-                    limit: 5,
-                    skip : skip,
-                    order: order,
-                    name: search
-                }
-            });
-
-            APP.Views.Navigation.highlight("movies");
-
-        },
-        showActorsList: function (page, order, search) {
-            var page = page || 1,
-                skip = (page - 1) * 5,
-                order = order || 1;
-            var actors = new APP.Collections.ActorsList();
-            var view = new APP.Views.ActorsList({ 
-                collection: actors, 
-                page: page,
-                order: order,
-                search: search
-            });
-
-            APP.showMainView(view);
-
-            actors.fetch({
-                reset: true,
-                data: {
-                    limit: 5,
-                    skip : skip,
-                    order: order,
-                    name: search
-                }
-            });
-
-            APP.Views.Navigation.highlight("actors");
-        },
-        showClientsList: function (page, order, search) {
-            var page = page || 1,
-                skip = (page - 1) * 5,
-                order = order || 1;
-            var clients = new APP.Collections.ClientsList();
-            var view = new APP.Views.ClientsList({ 
-                collection: clients, 
-                page: page,
-                order: order,
-                search: search
-            });
-
-            APP.showMainView(view);
-
-            clients.fetch({
-                reset: true,
-                data: {
-                    limit: 5,
-                    skip : skip,
-                    order: order,
-                    name: search
-                }
-            });
-
-            APP.Views.Navigation.highlight("clients");
-        },
-        showCategoriesList: function (page, order, search) {
-            var page = page || 1,
-                skip = (page - 1) * 5,
-                order = order || 1;
-            var categories = new APP.Collections.CategoriesList();
-            var view = new APP.Views.CategoriesList({ 
-                collection: categories,
-                page: page,
-                order: order,
-                search: search 
-            });
-
-            APP.showMainView(view);
-
-            categories.fetch({
-                reset: true,
-                data: {
-                    order: order,
-                    name: search
-                }
-            });
-
-            APP.Views.Navigation.highlight("categories");
-        },
-
-        showRentsList: function (page, order, search) {
-            var page = page || 1,
-                skip = (page - 1) * 5,
-                order = order || -1;
-            var rents = new APP.Collections.RentsList();
-            var view = new APP.Views.RentsList({ 
-                collection: rents,
-                page: page,
-                order: order,
-                search: search
-            });
-
-            APP.showMainView(view);
-
-            rents.fetch({
-                reset: true,
-                data: {
-                    limit: 5,
-                    skip : skip,
-                    order: order,
-                    name: search
-                }
-            });
-
-            APP.Views.Navigation.highlight("rents");
-
-        },
-
-        showMovieDetails: function (id) {
-            var movie = new APP.Models.Movie({ _id: id }),
-                view = new APP.Views.MovieDetails({ model: movie });
-
-            APP.showMainView(view);
-
-            movie.fetch();
-
-            APP.Views.Navigation.highlight("movies");
-
-        },
-        showActorDetails: function (id) {
-            var actor = new APP.Models.Actor({ _id: id }),
-                view = new APP.Views.ActorDetails({ model: actor });
-
-            APP.showMainView(view);
-
-            actor.fetch();
-
-            APP.Views.Navigation.highlight("actors");
-
-        },
-        showCategoryDetails: function (id) {
-            var category = new APP.Models.Category({ _id: id }),
-                view = new APP.Views.CategoryDetails({ model: category });
-
-            APP.showMainView(view);
-
-            category.fetch();
-
-            APP.Views.Navigation.highlight("categories");
-
-        },
-        showClientDetails: function (id) {
-            var client = new APP.Models.Client({ _id: id }),
-                view = new APP.Views.ClientDetails({ model: client });
-
-            APP.showMainView(view);
-
-            client.fetch();
-
-            APP.Views.Navigation.highlight("clients");
-
-        },
-        showRentDetails: function (id) {
-            var rent = new APP.Models.Rent({ _id: id }),
-                view = new APP.Views.RentDetails({ model: rent });
-
-            APP.showMainView(view);
-
-            rent.fetch();
-
-            APP.Views.Navigation.highlight("rents");
-
-        },
-        showMovieEdit: function (id) {
-            var movie = new APP.Models.Movie({ _id: id }),
-                view = new APP.Views.MovieEdit({ model: movie });
-
-            APP.showMainView(view);
-
-            movie.fetch();
-
-            APP.Views.Navigation.highlight("movies");
-
-        },
-        showActorEdit: function (id) {
-            var actor = new APP.Models.Actor({ _id: id }),
-                view = new APP.Views.ActorEdit({ model: actor });
-
-            APP.showMainView(view);
-
-            actor.fetch();
-
-            APP.Views.Navigation.highlight("actors");
-
-        },
-        showCategoryEdit: function (id) {
-            var category = new APP.Models.Category({ _id: id }),
-                view = new APP.Views.CategoryEdit({ model: category });
-
-            APP.showMainView(view);
-
-            category.fetch();
-
-            APP.Views.Navigation.highlight("categories");
-
-        },
-        showClientEdit: function (id) {
-            var client = new APP.Models.Client({ _id: id }),
-                view = new APP.Views.ClientEdit({ model: client });
-
-            APP.showMainView(view);
-
-            client.fetch();
-
-            APP.Views.Navigation.highlight("clients");
-
-        },
-        showRentEdit: function (id) {
-            var rent = new APP.Models.Rent({ _id: id }),
-                view = new APP.Views.RentEdit({ model: rent });
-
-            APP.showMainView(view);
-
-            rent.fetch();
-
-            APP.Views.Navigation.highlight("rents");
-
-        },
-        showMovieNew: function () {
-            var movie = new APP.Models.Movie(),
-                view = new APP.Views.MovieNew({ model: movie });
-
-            APP.showMainView(view);
-
-            APP.Views.Navigation.highlight("movies");
-
-        },
-        showActorNew: function () {
-            var actor = new APP.Models.Actor(),
-                view = new APP.Views.ActorNew({ model: actor });
-
-            APP.showMainView(view);
-
-            APP.Views.Navigation.highlight("actors");
-
-        },
-        showCategoryNew: function () {
-            var category = new APP.Models.Category(),
-                view = new APP.Views.CategoryNew({ model: category });
-
-            APP.showMainView(view);
-
-            APP.Views.Navigation.highlight("categories");
-
-        },
-        showClientsNew: function () {
-            var client = new APP.Models.Client(),
-                view = new APP.Views.ClientNew({ model: client });
-
-            APP.showMainView(view);
-
-            APP.Views.Navigation.highlight("clients");
-
-        },
-        showRentsNew: function () {
-            var rent = new APP.Models.Rent(),
-                view = new APP.Views.RentNew({ model: rent });
-
-            APP.showMainView(view);
-
-            APP.Views.Navigation.highlight("rents");
-
-        },
     });
 
 })();

@@ -8,12 +8,17 @@
         initialize: function () {
 
             this.listenToOnce(this.model, 'change', this.render);
-            this.listenToOnce(this.model, 'destroy', this.redirectToClients);
+            this.listenToOnce(this.model, 'destroy', _.bind(APP.Router.redirectToList, this));
             this.listenToOnce(this.model, 'destroy', this.showRemoveInfo);
             this.listenToOnce(this.model, "destroy", APP.showStatisticsView);
             this.listenToOnce(this.model, "destroy", APP.showLatestRentsView);
             this.listenTo(this.model, 'invalid', this.showErrorInfo);
             this.listenTo(this.model, 'update', this.showUpdateInfo);
+
+            this.delegateEvents({
+                "submit form": _.bind(APP.CRUD.updateItem, this),
+                "click .delete": _.bind(APP.CRUD.deleteItem, this)
+            });
 
         },
         render: function () {
@@ -57,40 +62,6 @@
         events: {
             "submit form": "updateClient",
             "click .delete": "deleteClient"
-        },
-        updateClient: function (e) {
-
-            e.preventDefault();
-
-            var model = this.model;
-
-            this.model.save({}, { 
-                wait: true,
-                success: function() {
-                    model.trigger("update");
-                }
-             });
-        },
-        deleteClient: function () {
-
-            var model = this.model;
-
-            var zd = new $.Zebra_Dialog("Czy na pewno chcesz usunąć?", {
-                type: "warning",
-                title: "Potwierdzenie usunięcia",
-                buttons: [
-                    {
-                    caption: "Tak",
-                    callback: function() {
-                        model.destroy({wait:true});
-                    }
-                },
-                {
-                    caption: "Anuluj"
-                }
-                ]
-            });
-
         },
         showRemoveInfo: function(model) {
 

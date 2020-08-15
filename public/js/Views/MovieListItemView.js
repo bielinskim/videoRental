@@ -6,6 +6,14 @@
 
         template: _.template($("#movieListItemTemplate").html()),
 
+        initialize: function() {
+
+            this.delegateEvents({
+                "click": _.bind(APP.Router.redirectToDetails, this)
+            });
+
+        },
+
         render: function () {
 
             var html = this.template(this.model.toJSON());
@@ -13,13 +21,6 @@
             this.$el.html(html);
 
             return this;
-        },
-        events: {
-            "click .details": "redirectToDetails"
-        },
-        redirectToDetails: function () {
-
-            APP.router.navigate("/movie/" + this.model.get("_id"), { trigger: true });
         }
 
     });

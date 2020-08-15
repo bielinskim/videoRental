@@ -42,9 +42,9 @@
 
         },
 
-        url: function () {
+        url: function (forceIsNew) {
 
-            if (this.isNew()) {
+            if (this.isNew() || forceIsNew) {
                 return "/clients";
             } else {
                 return "/client/" + this.get("_id");

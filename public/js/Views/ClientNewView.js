@@ -7,10 +7,14 @@
 
         initialize: function () {
 
-            this.listenToOnce(this.model, "sync", this.redirectToEdit);
+            this.listenTo(this.model, "sync", _.bind(APP.Router.redirectToEdit, this));
             this.listenToOnce(this.model, "sync", this.showAddedInfo);
             this.listenToOnce(this.model, "sync", APP.showStatisticsView);
             this.listenTo(this.model, 'invalid', this.showErrorInfo);
+
+            this.delegateEvents({
+                "submit form": _.bind(APP.CRUD.createItem, this)
+            });
 
             this.render();
 
@@ -53,15 +57,6 @@
             "#client-zip-code": "zip_code",
             "#client-city": "city"
         },
-        events: {
-            "submit form": "updateClient"
-        },
-        updateClient: function (e) {
-
-            e.preventDefault();
-
-            this.model.save({}, { wait: true });
-        },
         showAddedInfo: function(model) {
 
             var zd = new $.Zebra_Dialog("Rekord został poprawnie zapisany", {
@@ -76,11 +71,6 @@
                 type: "error",
                 title: "Wystąpił błąd"
             });
-
-        },
-        redirectToEdit: function () {
-
-            APP.router.navigate("client/" + this.model.get("_id") + "/edit", { trigger: true });
 
         }
     })

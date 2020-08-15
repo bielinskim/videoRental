@@ -8,13 +8,18 @@
         initialize: function () {
 
             this.listenToOnce(this.model, 'change', this.render);
-            this.listenToOnce(this.model, 'destroy', this.redirectToRents);
+            this.listenToOnce(this.model, 'destroy', _.bind(APP.Router.redirectToList, this));
             this.listenToOnce(this.model, 'destroy', this.showRemoveInfo);
             this.listenToOnce(this.model, "destroy", APP.showStatisticsView);
             this.listenTo(this.model, "destroy", APP.showLatestRentsView);
             this.listenTo(this.model, 'invalid', this.showErrorInfo);
             this.listenTo(this.model, 'update', this.showUpdateInfo);
             this.listenTo(this.model, "update", APP.showLatestRentsView);
+
+            this.delegateEvents({
+                "submit form": _.bind(APP.CRUD.updateItem, this),
+                "click .delete": _.bind(APP.CRUD.deleteItem, this)
+            });
 
         },
         render: function () {
@@ -93,44 +98,6 @@
         events: {
             "submit form": "updateRent",
             "click .delete": "deleteRent"
-        },
-        updateRent: function (e) {
-
-            e.preventDefault();
-
-            this.model.unset("movie_title");
-            this.model.unset("client_name");
-            this.model.unset("date");
-
-            var model = this.model;
-
-            this.model.save({}, { 
-                wait: true, 
-                success: function() {
-                    model.trigger("update");
-                } 
-            });
-        },
-        deleteRent: function () {
-
-            var model = this.model;
-
-            var zd = new $.Zebra_Dialog("Czy na pewno chcesz usunąć?", {
-                type: "warning",
-                title: "Potwierdzenie usunięcia",
-                buttons: [
-                    {
-                    caption: "Tak",
-                    callback: function() {
-                        model.destroy({wait:true});
-                    }
-                },
-                {
-                    caption: "Anuluj"
-                }
-                ]
-            });
-
         },
         showRemoveInfo: function(model) {
 

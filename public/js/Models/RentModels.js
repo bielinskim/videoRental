@@ -22,9 +22,9 @@
 
         },
 
-        url: function () {
+        url: function (forceIsNew) {
 
-            if (this.isNew()) {
+            if (this.isNew() || forceIsNew) {
                 return "/rents";
             } else {
                 return "/rent/" + this.get("_id");

@@ -10,6 +10,10 @@
 
             this.listenTo(this.model, 'change', this.render);
 
+            this.delegateEvents({
+                "click .edit": _.bind(APP.Router.redirectToEdit, this)
+            });
+
         },
         render: function () {
 
@@ -18,12 +22,6 @@
             this.$el.html(html);
 
             APP.Regions.appContent.html(this.el);
-        },
-        events: {
-            "click .edit": "showEdit"
-        },
-        showEdit: function () {
-            APP.router.navigate("movie/" + this.model.get("_id") + "/edit", { trigger: true });
         }
 
     });

@@ -7,7 +7,20 @@
 
         highlight: function (route) {
 
-            var tabItem = this.tabItems.filter("[href='/" + route + "']"),
+            var names = {
+                "movie": "movies",
+                "movies": "movies",
+                "actor": "actors",
+                "actors": "actors",
+                "category": "categories",
+                "categories": "categories",
+                "rent": "rents",
+                "rents": "rents",
+                "client": "clients",
+                "clients": "clients"
+            };
+
+            var tabItem = this.tabItems.filter("[href='/" + names[route] + "']"),
                 tab = tabItem.parent(),
                 tabsId = tab.attr("id"),
                 menuItem = this.menu.filter("[data-id='" + tabsId + "']")

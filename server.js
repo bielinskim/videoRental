@@ -63,7 +63,7 @@ function createItem(req, res) {
 
         const db = database.db('videoRental');
 
-        db.collection("movies").insert(req.body, function (err, doc) {
+        db.collection(colname).insert(req.body, function (err, doc) {
 
             if (err) return handleError(res);
             res.json(doc.ops[0]);

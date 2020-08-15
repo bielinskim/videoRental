@@ -41,9 +41,9 @@
 
         },
 
-        url: function () {
+        url: function (forceIsNew) {
 
-            if (this.isNew()) {
+            if (this.isNew() || forceIsNew) {
                 return "/movies";
             } else {
                 return "/movie/" + this.get("_id");

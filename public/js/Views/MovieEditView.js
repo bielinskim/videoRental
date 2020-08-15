@@ -8,11 +8,16 @@
         initialize: function () {
 
             this.listenToOnce(this.model, 'change', this.render);
-            this.listenToOnce(this.model, 'destroy', this.redirectToMovies);
+            this.listenToOnce(this.model, 'destroy', _.bind(APP.Router.redirectToList, this));
             this.listenToOnce(this.model, 'destroy', this.showRemoveInfo);
             this.listenToOnce(this.model, "destroy", APP.showStatisticsView);
             this.listenTo(this.model, 'invalid', this.showErrorInfo);
             this.listenTo(this.model, 'update', this.showUpdateInfo);
+
+            this.delegateEvents({
+                "submit form": _.bind(APP.CRUD.updateItem, this),
+                "click .delete": _.bind(APP.CRUD.deleteItem, this)
+            });
 
         },
         render: function () {
@@ -109,37 +114,6 @@
         events: {
             "submit form": "updateMovie",
             "click .delete": "deleteMovie"
-        },
-        updateMovie: function (e) {
-
-            e.preventDefault();
-
-            this.model.unset("rent_number");
-
-            this.model.unset("available");
-
-            this.model.save({}, { wait: true });
-        },
-        deleteMovie: function () {
-
-            var model = this.model;
-
-            var zd = new $.Zebra_Dialog("Czy na pewno chcesz usunąć?", {
-                type: "warning",
-                title: "Potwierdzenie usunięcia",
-                buttons: [
-                    {
-                    caption: "Tak",
-                    callback: function() {
-                        model.destroy({wait:true});
-                    }
-                },
-                {
-                    caption: "Anuluj"
-                }
-                ]
-            });
-
         },
         showRemoveInfo: function(model) {
 
