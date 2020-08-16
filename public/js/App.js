@@ -266,8 +266,106 @@
 
             return text.charAt(0).toUpperCase() + text.slice(1);
 
+        },
+        
+        formatDate: function(date) {
+
+            var d = new Date(date),
+                day = d.getDate(),
+                month = d.getMonth() + 1,
+                year = d.getFullYear();
+
+                month = (month < 10) ? "0" + month : month;
+
+                return day + "." + month + "." + year;
+
+        },
+
+        formatDateMoment: function(date) {
+
+            var d = new Date(date);
+
+            return moment(d).locale('pl').calendar();
+
         }
 
+    };
+
+    APP.UI = {
+
+        autocomplete: function(view, elem, options) {
+
+            var defaults = {
+                method: 'get',
+                allowFreeEntries: false,
+                toggleOnClick: true,
+                queryParam: "name",
+            };
+
+            var options = _.extend(defaults, options),
+                field = view.$el.find(elem).magicSuggest(options);
+
+                $(field).on("selectionchange", function (e, m, items) {
+                    if (options.oneAllowed && items.length > 1) {
+                        
+                        this.removeFromSelection(items[0], true);
+
+                    } 
+
+                    if(items.length) {
+
+                        if(options.oneAllowed) {
+                            view.model.set(options.name, items[0]._id);
+                        } else {
+                            view.model.set(options.name, _.pluck(items, 'name'));
+                        }
+
+                        this.container.addClass('selected');
+
+                    } else {
+                        view.model.set(options.name, view.model.defaults[options.name]);
+
+                        this.container.removeClass('selected');
+                    }
+                });
+
+                if(options.loadData) {
+
+                    $(field).on("load", function() {
+
+                        var value = view.model.get(options.name);
+
+                        if(!_.isArray(value)) {
+                            value = [value];
+                        }
+
+                        field.setValue(value);
+
+                    });
+
+                }
+        },
+
+        datePicker: function(view, prop, elem) {
+
+            var beatPicker = new BeatPicker({
+                dateInputNode: view.$el.find(elem),
+                modules: {
+                    footer: false,
+                    icon: false,
+                    clear: false
+                },
+                dateFormat: {
+                    format: ["DD", "MM", "YYYY"]
+                }
+            });
+    
+            beatPicker.on("change", function (o) {
+                view.model.set(prop, o.string);
+            });
+
+        }
+        
     };
 
     APP.Messages = {

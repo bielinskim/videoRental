@@ -110,7 +110,7 @@
     <script id="latestRentsWidgetListItemTemplate" type="text/template">
         <span class="client"><%= client_name %></span>
         <span class="movie"><%= movie_title %></span>
-        <span class="date"><%= this.formatDateMoment(date) %></span>
+        <span class="date"><%= APP.Utils.formatDateMoment(date) %></span>
     </script>
 
     <script id="latestRentsWidgetTemplate" type="text/template">
@@ -179,7 +179,7 @@
                             <i class="fa fa-user"></i><%= client_name %>
                         </span>
                         <span class="date">
-                            <i class="fa fa-calendar"></i><%= date %>
+                            <i class="fa fa-calendar"></i><%= APP.Utils.formatDate(date) %>
                         </span>
                         <span class="btn-rounded details">
                             <i class="fa fa-search"></i>

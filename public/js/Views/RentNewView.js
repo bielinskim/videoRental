@@ -29,58 +29,24 @@
 
             APP.Regions.appContent.html(this.el);
 
-            var movieField = this.$("#ms-movie-id").magicSuggest({
+            APP.UI.autocomplete(this, '#ms-movie-id', {
+                name: "movie_id",
                 data: "/movies",
-                method: 'get',
                 valueField: '_id',
                 displayField: 'title',
-                allowFreeEntries: false,
-                toggleOnClick: true,
                 placeholder: "Wybierz film",
-                queryParam: "name",
+                cls: "medium",
+                oneAllowed: true
             });
 
-            $(movieField).on("selectionchange", function (e, m, movies) {
-                if(movies.length > 1) {
-                    this.removeFromSelection(movies[0], true);
-                }
-
-                if (movies.length) {
-                    model.set("movie_id", movies[0]._id);
-
-                    this.container.addClass("selected");
-                } else {
-                    model.set("movie_id", "");
-
-                    this.container.removeClass("selected");
-                }
-            });
-
-            var clientField = this.$("#ms-client-id").magicSuggest({
+            APP.UI.autocomplete(this, '#ms-client-id', {
+                name: "client_id",
                 data: "/clients",
-                method: 'get',
                 valueField: '_id',
                 displayField: 'name',
-                allowFreeEntries: false,
-                toggleOnClick: true,
                 placeholder: "Wybierz klienta",
-                queryParam: "name",
-            });
-
-            $(clientField).on("selectionchange", function (e, m, clients) {
-                if(clients.length > 1) {
-                    this.removeFromSelection(clients[0], true);
-                }
-
-                if (clients.length) {
-                    model.set("client_id", clients[0]._id);
-
-                    this.container.addClass("selected");
-                } else {
-                    model.set("client_id", "");
-
-                    this.container.removeClass("selected");
-                }
+                cls: "medium",
+                oneAllowed: true
             });
 
             return this;

@@ -32,21 +32,7 @@
 
             this.stickit();
 
-            var beatPicker = new BeatPicker({
-                dateInputNode: this.$("#client-birthdate"),
-                modules: {
-                    footer: false,
-                    icon: false,
-                    clear: false
-                },
-                dateFormat: {
-                    format: ["DD", "MM", "YYYY"]
-                }
-            });
-
-            beatPicker.on("change", function (o) {
-                model.set("birthdate", o.string);
-            });
+            APP.UI.datePicker(this, "birthdate", "#client-birthdate");
 
             return this;
         },

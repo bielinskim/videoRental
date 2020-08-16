@@ -31,69 +31,24 @@
 
             this.stickit();
 
-            var categoriesField = this.$("#ms-movie-categories").magicSuggest({
+            APP.UI.autocomplete(this, '#ms-movie-categories', {
+                name: "categories",
                 data: "/categories",
-                method: 'get',
                 valueField: 'name',
                 displayField: 'name',
-                allowFreeEntries: false,
-                toggleOnClick: true,
                 placeholder: "Wybierz kategorie",
-                queryParam: "name",
                 cls: "medium"
             });
 
-            $(categoriesField).on("selectionchange", function (e, m, categories) {
-                if (categories.length) {
-                    model.set("categories", _.pluck(categories, "name"));
-
-                    this.container.addClass("selected");
-                } else {
-                    model.set("categories", []);
-
-                    this.container.removeClass("selected");
-                }
-            })
-
-            var actorsField = this.$("#ms-movie-actors").magicSuggest({
+            APP.UI.autocomplete(this, '#ms-movie-actors', {
+                name: "actors",
                 data: "/actors",
-                method: 'get',
                 valueField: 'name',
                 displayField: 'name',
-                allowFreeEntries: false,
-                toggleOnClick: true,
-                placeholder: "Wybierz aktorów",
-                queryParam: "name",
-                cls: "medium"
+                placeholder: "Wybierz aktorów"
             });
 
-            $(actorsField).on("selectionchange", function (e, m, actors) {
-                if (actors.length) {
-                    model.set("actors", _.pluck(actors, "name"));
-
-                    this.container.addClass("selected");
-                } else {
-                    model.set("actors", []);
-
-                    this.container.removeClass("selected");
-                }
-            });
-
-            var beatPicker = new BeatPicker({
-                dateInputNode: this.$("#movie-date"),
-                modules: {
-                    footer: false,
-                    icon: false,
-                    clear: false
-                },
-                dateFormat: {
-                    format: ["DD", "MM", "YYYY"]
-                }
-            });
-
-            beatPicker.on("change", function (o) {
-                model.set("date", o.string);
-            });
+            APP.UI.datePicker(this, "birthdate", "#movie-date");
 
             return this;
         },
