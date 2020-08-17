@@ -4,7 +4,7 @@
 
         tagName: "li",
 
-        template: _.template($("#clientListItemTemplate").html()),
+        template: JST['clientListItemTemplate'],
 
         initialize: function() {
 

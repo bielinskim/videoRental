@@ -4,7 +4,7 @@
 
         tagName: "li",
 
-        template: _.template($("#latestRentsWidgetListItemTemplate").html()),
+        template: JST['latestRentsWidgetListItemTemplate'],
 
         initialize: function() {
 

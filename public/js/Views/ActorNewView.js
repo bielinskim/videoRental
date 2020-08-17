@@ -3,7 +3,7 @@
 
         tagName: "div",
 
-        template: _.template($("#actorEditNewViewTemplate").html()),
+        template: JST['actorEditNewViewTemplate'],
 
         initialize: function () {
 

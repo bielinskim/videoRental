@@ -1,0 +1,17 @@
+<div class="app-search">
+    <input type="text" placeholder="<%= placeholder %>">
+</div>
+
+<span class="btn-rounded active add">
+    <i class="fa fa-plus"></i>
+</span>
+
+<ul class="app-sort">
+    <% if(order == "1") { %>
+    <li data-order="1">Rosnąco</li>
+    <li data-order="-1">Malejąco</li>
+    <% } else { %>
+    <li data-order="-1">Malejąco</li>
+    <li data-order="1">Rosnąco</li>
+    <% } %>
+</ul>

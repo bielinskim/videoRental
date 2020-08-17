@@ -5,7 +5,7 @@
         tagName: "div",
         className: "app-status",
 
-        template: _.template($("#statisticsWidgetTemplate").html()),
+        template: JST['statisticsWidgetTemplate'],
 
         initialize: function() {
 

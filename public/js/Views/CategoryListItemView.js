@@ -4,7 +4,7 @@
 
         tagName: "li",
 
-        template: _.template($("#categoryListItemTemplate").html()),
+        template: JST['categoryListItemTemplate'],
 
         initialize: function() {
 

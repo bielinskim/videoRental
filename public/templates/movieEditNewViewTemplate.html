@@ -1,0 +1,46 @@
+<% if(this.model.isNew()) { %>
+<h3 class="app-heading"><i class="fa fa-plus"></i> Nowy film</h3>
+<% } else { %>
+<h3 class="app-heading"><i class="fa fa-edit"></i> Edycja filmu</h3>
+<% } %>
+<div class="app-form">
+    <form action="" id="new-movie">
+        <div class="app-form-field">
+            <label for="movie-title">Tytuł</label>
+            <input type="text" id="movie-title" value="">
+        </div>
+
+        <div class="app-form-field">
+            <label for="movie-date">Data</label>
+            <input type="text" id="movie-date" class="short" placeholder="dd-mm-rrrr">
+        </div>
+
+        <div class="app-form-field">
+            <label for="ms-movie-categories">Kategorie</label>
+            <input type="text" class="medium" id="ms-movie-categories" placeholder="Wybierz kategorie">
+        </div>
+
+        <div class="app-form-field">
+            <label for="ms-movie-actors">Aktorzy</label>
+            <input type="text" class="medium" id="ms-movie-actors" placeholder="Wybierz aktorów">
+        </div>
+
+        <div class="app-form-field">
+            <label for="movie-description">Opis</label>
+            <textarea id="movie-description"></textarea>
+        </div>
+
+        <div class="app-form-field">
+            <label for="movie-quantity">Ilość</label>
+            <input type="text" id="movie-quantity" class="short" placeholder="20">
+        </div>
+
+        <div class="app-form-submit">
+            <button type="submit" class="btn">Zapisz</button>
+            <% if(!this.model.isNew()) { %>
+            <button type="button" class="btn special delete">Usuń</button>
+            <% } %>
+
+        </div>
+    </form>
+</div>

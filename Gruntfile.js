@@ -7,6 +7,19 @@ module.exports = function(grunt) {
             dist: "dist/"
         },
 
+        jst: {
+            options: {
+                processName: function(filepath) {   
+                    return filepath.split('/').pop().replace('.html', "");
+                }
+            },
+            dist: {
+                files: {
+                    "public/templates/templates.js": "public/templates/*.html"
+                }
+            }
+        },
+
         targethtml: {
             dist: {
                 files: {
@@ -25,6 +38,7 @@ module.exports = function(grunt) {
                         "public/js/libs/*.js"
                     ],
                     "dist/public/js/app.min.js": [
+                        "public/templates/templates.js",
                         "public/js/App.js",
                         "public/js/models/*.js",
                         "public/js/collections/*.js",
@@ -75,6 +89,7 @@ module.exports = function(grunt) {
     });
 
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-jst');
     grunt.loadNpmTasks('grunt-targethtml');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -82,6 +97,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-contrib-copy');
 
-    grunt.registerTask('build', ['clean', 'targethtml', 'concat', 'uglify', 'cssmin', 'htmlmin', 'copy']);
+    grunt.registerTask('build', ['clean', 'jst', 'targethtml', 'concat', 'uglify', 'cssmin', 'htmlmin', 'copy']);
 
 }

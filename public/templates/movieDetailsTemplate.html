@@ -1,0 +1,14 @@
+<h3 class="app-heading"><i class="fa fa-info"></i> Szczegóły filmu</h3>
+
+<div class="app-item-info">
+    <p><span>Tytuł:</span><%= title %></p>
+    <p><span>Data wydania:</span><%= date %></p>
+    <p><span>Kategorie:</span><%= categories.join(", ") %></p>
+    <p><span>Aktorzy:</span><%= actors.join(", ") %></p>
+    <p><span>Opis:</span> <i><%= description %></i></p>
+    <p><span>Ilość płyt:</span><%= quantity %></p>
+    <p><span>Wypożyczonych:</span> <%= rent_number %> </p>
+    <p><span>Dostępny:</span> <% available ? print("tak") : print("nie") %> </p>
+
+    <button type="button" class="btn edit">Edytuj</button>
+</div>

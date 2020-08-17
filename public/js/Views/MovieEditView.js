@@ -3,7 +3,7 @@
 
         tagName: "div",
 
-        template: _.template($("#movieEditNewViewTemplate").html()),
+        template: JST['movieEditNewViewTemplate'],
 
         initialize: function () {
 
@@ -38,7 +38,7 @@
                 displayField: 'name',
                 placeholder: "Wybierz kategorie",
                 cls: "medium",
-                loadData = true
+                loadData: true
             });
 
             APP.UI.autocomplete(this, '#ms-movie-actors', {
@@ -47,7 +47,7 @@
                 valueField: 'name',
                 displayField: 'name',
                 placeholder: "Wybierz aktorów",
-                loadData = true
+                loadData: true
             });
 
             APP.UI.datePicker(this, "birthdate", "#movie-date");

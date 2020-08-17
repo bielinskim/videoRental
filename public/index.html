@@ -6,7 +6,12 @@
     <title>VideoRental</title>
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Droid+Sans:400,700">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+    <!--(if target dev)><!-->
     <link rel="stylesheet" href="css/style.css">
+    <!--<!(endif)-->
+    <!--(if target dist)>
+        <link rel="stylesheet" href="css/style.min.css">
+    <!(endif)-->
 </head>
 
 <body>
@@ -88,339 +93,7 @@
 
     </div><!-- /.app-wrapper -->
 
-    <script id="breadcrumbsWidgetTemplate" type="text/template">
-        <% for(var i = 0; i < pathItems.length; i++) { %>
-        <span class="app-status-item"><%= pathItems[i] %></span>
-        <% } %>
-    </script>
-
-    <script id="statisticsWidgetTemplate" type="text/template">
-    <span class="app-status-item"><i class="fa fa-film"></i> Filmów <strong><%= movies %></strong></span>
-    <span class="app-status-item"><i class="fa fa-thumbs-o-up"></i> Wypożyczeń<strong><%= rents %></strong></span>
-    <span class="app-status-item"><i class="fa fa-user"></i> Klientów <strong><%= clients %></strong></span>
-    </script>
-
-    <script id="listPaginationTemplate" type="text/template">
-    <% for(var i = 1; i<= anchors; i ++) { %>
-        <a href='#' class='<% i == active ? print("active") : "" %>' data-page="<%= i %>"><%= i %></a>
-        <% } %>
-    </script>
-
-
-    <script id="latestRentsWidgetListItemTemplate" type="text/template">
-        <span class="client"><%= client_name %></span>
-        <span class="movie"><%= movie_title %></span>
-        <span class="date"><%= APP.Utils.formatDateMoment(date) %></span>
-    </script>
-
-    <script id="latestRentsWidgetTemplate" type="text/template">
-        <h3>
-            <i class="fa fa-thumbs-o-up"></i>
-            Ostatnie wypożyczenia
-        </h3>
-    </script>
-
-    <script id="listActionsTemplate" type="text/template">
-        <div class="app-search">
-            <input type="text" placeholder="<%= placeholder %>">
-        </div>
-    
-        <span class="btn-rounded active add">
-            <i class="fa fa-plus"></i>
-        </span>
-
-    <ul class="app-sort">
-        <% if(order == "1") { %>
-        <li data-order="1">Rosnąco</li>
-        <li data-order="-1">Malejąco</li>
-        <% } else { %>
-        <li data-order="-1">Malejąco</li>
-        <li data-order="1">Rosnąco</li>
-        <% } %>
-    </ul>
-    </script>
-
-    <script id="movieListItemTemplate" type="text/template">
-    <li>
-        <span class="title"><%= title %></span>
-        <span class="btn-rounded details">
-            <i class="fa fa-search"></i>
-        </span>
-    </li>
-</script>
-    <script id="actorListItemTemplate" type="text/template">
-    <li>
-        <span class="name"><%= name %></span>
-        <span class="btn-rounded details">
-            <i class="fa fa-search"></i>
-        </span>
-    </li>
-</script>
-    <script id="categoryListItemTemplate" type="text/template">
-    <li>
-        <span class="name"><%= name %></span>
-        <span class="btn-rounded details">
-            <i class="fa fa-search"></i>
-        </span>
-    </li>
-</script>
-    <script id="clientListItemTemplate" type="text/template">
-    <li>
-        <span class="name"><%= name %></span>
-        <span class="btn-rounded details">
-            <i class="fa fa-search"></i>
-        </span>
-    </li>
-</script>
-    <script id="rentListItemTemplate" type="text/template">
-        <li>
-        <span class="title"><%= movie_title %></span>
-                        <span class="client">
-                            <i class="fa fa-user"></i><%= client_name %>
-                        </span>
-                        <span class="date">
-                            <i class="fa fa-calendar"></i><%= APP.Utils.formatDate(date) %>
-                        </span>
-                        <span class="btn-rounded details">
-                            <i class="fa fa-search"></i>
-                        </span>
-                    </li>
-</script>
-    <script id="movieDetailsTemplate" type="text/template">
-    <h3 class="app-heading"><i class="fa fa-info"></i> Szczegóły filmu</h3>
-
-    <div class="app-item-info">
-        <p><span>Tytuł:</span><%= title %></p>
-        <p><span>Data wydania:</span><%= date %></p>
-        <p><span>Kategorie:</span><%= categories.join(", ") %></p>
-        <p><span>Aktorzy:</span><%= actors.join(", ") %></p>
-        <p><span>Opis:</span> <i><%= description %></i></p>
-        <p><span>Ilość płyt:</span><%= quantity %></p>
-        <p><span>Wypożyczonych:</span> <%= rent_number %> </p>
-        <p><span>Dostępny:</span> <% available ? print("tak") : print("nie") %> </p>
-
-        <button type="button" class="btn edit">Edytuj</button>
-    </div>
-    </script>
-    <script id="actorDetailsTemplate" type="text/template">
-        <h3 class="app-heading"><i class="fa fa-info"></i> Szczegóły aktora</h3>
-    
-        <div class="app-item-info">
-            <p><span>Imię i nazwisko:</span><%= name %></p>
-    
-            <button type="button" class="btn edit">Edytuj</button>
-        </div>
-        </script>
-    <script id="categoryDetailsTemplate" type="text/template">
-            <h3 class="app-heading"><i class="fa fa-info"></i> Szczegóły kategorii</h3>
-        
-            <div class="app-item-info">
-                <p><span>Nazwa:</span><%= name %></p>
-        
-                <button type="button" class="btn edit">Edytuj</button>
-            </div>
-            </script>
-    </script>
-    <script id="clientDetailsTemplate" type="text/template">
-        <h3 class="app-heading"><i class="fa fa-info"></i> Szczegóły klienta</h3>
-    
-        <div class="app-item-info">
-            <p><span>Imię:</span><%= first_name %></p>
-            <p><span>Nazwisko:</span><%= last_name %></p>
-            <p><span>Data urodzenia:</span><%= birthdate %></p>
-            <p><span>Number dowodu:</span><%= idc_number %></p>
-            <p><span>Adres:</span> <i><%= address %></i></p>
-            <p><span>Kod pocztowy:</span><%= zip_code %></p>
-            <p><span>Miasto:</span><%= city %></p>
-    
-            <button type="button" class="btn edit">Edytuj</button>
-        </div>
-        </script>
-    <script id="rentDetailsTemplate" type="text/template">
-        <h3 class="app-heading"><i class="fa fa-info"></i> Szczegóły wypożyczenia</h3>
-
-        <div class="app-item-info">
-            <p><span>Film:</span> <%= movie_title %> </p>
-            <p><span>Klient:</span> <%= client_name %> </p>
-            <p><span>Data:</span> <%= date %> </p>
-
-            <button type="button" class="btn edit">Edytuj</button>
-            </script>
-    <script id="movieEditNewViewTemplate" type="text/template">
-        <% if(this.model.isNew()) { %>
-            <h3 class="app-heading"><i class="fa fa-plus"></i> Nowy film</h3>
-        <% } else { %>
-            <h3 class="app-heading"><i class="fa fa-edit"></i> Edycja filmu</h3>
-            <% } %>
-                <div class="app-form">
-                    <form action="" id="new-movie">
-                        <div class="app-form-field">
-                            <label for="movie-title">Tytuł</label>
-                            <input type="text" id="movie-title" value="">
-                        </div>
-
-                        <div class="app-form-field">
-                            <label for="movie-date">Data</label>
-                            <input type="text" id="movie-date" class="short" placeholder="dd-mm-rrrr">
-                        </div>
-
-                        <div class="app-form-field">
-                            <label for="ms-movie-categories">Kategorie</label>
-                            <input type="text" class="medium" id="ms-movie-categories" placeholder="Wybierz kategorie">
-                        </div>
-
-                        <div class="app-form-field">
-                            <label for="ms-movie-actors">Aktorzy</label>
-                            <input type="text" class="medium" id="ms-movie-actors" placeholder="Wybierz aktorów">
-                        </div>
-
-                        <div class="app-form-field">
-                            <label for="movie-description">Opis</label>
-                            <textarea id="movie-description"></textarea>
-                        </div>
-
-                        <div class="app-form-field">
-                            <label for="movie-quantity">Ilość</label>
-                            <input type="text" id="movie-quantity" class="short" placeholder="20">
-                        </div>
-
-                        <div class="app-form-submit">
-                            <button type="submit" class="btn">Zapisz</button>
-                            <% if(!this.model.isNew()) { %>
-                                <button type="button" class="btn special delete">Usuń</button>
-                            <% } %>
-                            
-                        </div>
-                    </form>
-                </div>
-            </script>
-    <script id="actorEditNewViewTemplate" type="text/template">
-        <% if(this.model.isNew()) { %>
-            <h3 class="app-heading"><i class="fa fa-plus"></i> Nowy aktor</h3>
-        <% } else { %>
-            <h3 class="app-heading"><i class="fa fa-edit"></i> Edycja aktora</h3>
-            <% } %>
-                
-        
-                        <div class="app-form">
-                            <form action="" id="new-actor">
-                                <div class="app-form-field">
-                                    <label for="actor-name">Nazwa</label>
-                                    <input type="text" id="actor-name" value="">
-                                </div>
-        
-        
-                                <div class="app-form-submit">
-                                    <button type="submit" class="btn">Zapisz</button>
-                                    <% if(!this.model.isNew()) { %>
-                                        <button type="button" class="btn special delete">Usuń</button>
-                                    <% } %>
-                                </div>
-                            </form>
-                        </div>
-                    </script>
-    <script id="categoryEditNewViewTemplate" type="text/template">
-        <% if(this.model.isNew()) { %>
-            <h3 class="app-heading"><i class="fa fa-plus"></i> Nowa kategoria</h3>
-        <% } else { %>
-            <h3 class="app-heading"><i class="fa fa-edit"></i> Edycja kategorii</h3>
-            <% } %>
-                                <div class="app-form">
-                                    <form action="" id="new-category">
-                                        <div class="app-form-field">
-                                            <label for="category-name">Nazwa</label>
-                                            <input type="text" id="category-name" value="">
-                                        </div>
-                
-                
-                                        <div class="app-form-submit">
-                                            <button type="submit" class="btn">Zapisz</button>
-                                            <% if(!this.model.isNew()) { %>
-                                                <button type="button" class="btn special delete">Usuń</button>
-                                            <% } %>
-                                        </div>
-                                    </form>
-                                </div>
-                            </script>
-    <script id="clientEditNewViewTemplate" type="text/template">
-        <% if(this.model.isNew()) { %>
-            <h3 class="app-heading"><i class="fa fa-plus"></i> Nowy klient</h3>
-        <% } else { %>
-            <h3 class="app-heading"><i class="fa fa-edit"></i> Edycja klienta</h3>
-            <% } %>
-                                        <div class="app-form">
-                                            <form action="" id="new-movie">
-                                                <div class="app-form-field">
-                                                    <label for="client-first-name">Imię</label>
-                                                    <input type="text" id="client-first-name" value="" placeholder="Imię">
-                                                </div>
-                        
-                                                <div class="app-form-field">
-                                                    <label for="client-last-name">Nazwisko</label>
-                                                    <input type="text" id="client-last-name" class="short" placeholder="Nazwisko">
-                                                </div>
-                        
-                                                <div class="app-form-field">
-                                                    <label for="client-birthdate">Data urodzenia</label>
-                                                    <input type="text" class="medium" id="client-birthdate" placeholder="Data urodzenia">
-                                                </div>
-                        
-                                                <div class="app-form-field">
-                                                    <label for="client-idc-number">Numer dowodu</label>
-                                                    <input type="text" class="medium" id="client-idc-number" placeholder="Numer dowodu">
-                                                </div>
-                        
-                                                <div class="app-form-field">
-                                                    <label for="client-address">Adres</label>
-                                                    <input type="text" class="medium" id="client-address" placeholder="Adres">
-                                                </div>
-                        
-                                                <div class="app-form-field">
-                                                    <label for="client-zip-code">Kod pocztowy</label>
-                                                    <input type="text" class="medium" id="client-zip-code" placeholder="Kod pocztowy">
-                                                </div>
-
-                                                <div class="app-form-field">
-                                                    <label for="client-city">Miasto</label>
-                                                    <input type="text" class="medium" id="client-city" placeholder="Miasto">
-                                                </div>
-                        
-                                                <div class="app-form-submit">
-                                                    <button type="submit" class="btn">Zapisz</button>
-                                                    <% if(!this.model.isNew()) { %>
-                                                        <button type="button" class="btn special delete">Usuń</button>
-                                                    <% } %>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </script>
-    <script id="rentEditNewViewTemplate" type="text/template">
-                <% if(this.model.isNew()) { %>
-                    <h3 class="app-heading"><i class="fa fa-plus"></i> Nowe wypożyczenie</h3>
-                <% } else { %>
-                    <h3 class="app-heading"><i class="fa fa-edit"></i> Edycja wypożyczenia</h3>
-                    <% } %>
-                    <div class="app-form">
-                        <form action="" id="new-rent">
-                            <div class="app-form-field">
-                                <label for="ms-movie-id">Film</label>
-                                <input type="text" class="medium" id="ms-movie-id" placeholder="Wybierz film">
-                            </div>
-    
-                            <div class="app-form-field">
-                                <label for="ms-client-id">Klient</label>
-                                <input type="text" class="medium" id="ms-client-id" placeholder="Wybierz klienta">
-                            </div>
-    
-                            <div class="app-form-submit">
-                                <button type="submit" class="btn">Zapisz</button>
-                                <% if(!this.model.isNew()) { %>
-                                    <button type="button" class="btn special delete">Zwróć</button>
-                                <% } %>
-                            </div>
-                        </form>
-                    </div>
-    </script>
+    <!--(if target !dist)><!-->
     <script src="js/libs/jquery.js"></script>
     <script src="js/libs/underscore.js"></script>
     <script src="js/libs/backbone.js"></script>
@@ -431,6 +104,8 @@
     <script src="js/libs/zebra-dialog.js"></script>
     <script src="js/libs/moment.js"></script>
     <script src="js/libs/moment.pl.js"></script>
+
+    <script src="templates/templates.js"></script>
 
     <script src="js/App.js"></script>
 
@@ -487,6 +162,12 @@
     <script src="js/Views/BreadcrumbsView.js"></script>
 
     <script src="js/Routers/Router.js"></script>
+    <!--<!(endif)-->
+
+    <!--(if target dist)>
+        <script src='js/libs.min.js'></script>
+        <script src='js/app.min.js'></script>
+    <!(endif)-->
 
     <script>
         APP.init();

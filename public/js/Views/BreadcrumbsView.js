@@ -5,7 +5,7 @@
         tagName: "div",
         className: "app-breadcrumbs",
 
-        template: _.template($("#breadcrumbsWidgetTemplate").html()),
+        template: JST['breadcrumbsWidgetTemplate'],
 
         initialize: function() {
 

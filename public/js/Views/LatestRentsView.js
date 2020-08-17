@@ -6,7 +6,7 @@
 
         className: "app-latest-rents",
 
-        template: _.template($("#latestRentsWidgetTemplate").html()),
+        template: JST['latestRentsWidgetTemplate'],
 
         initialize: function() {
 

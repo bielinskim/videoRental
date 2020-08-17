@@ -4,7 +4,7 @@
 
         tagName: "li",
 
-        template: _.template($("#movieListItemTemplate").html()),
+        template: JST['movieListItemTemplate'],
 
         initialize: function() {
 

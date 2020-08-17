@@ -3,7 +3,7 @@
 
         tagName: "div",
 
-        template: _.template($("#clientEditNewViewTemplate").html()),
+        template: JST['clientEditNewViewTemplate'],
 
         initialize: function () {
 

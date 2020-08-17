@@ -4,7 +4,7 @@
 
         tagName: 'div',
 
-        template: _.template($("#actorDetailsTemplate").html()),
+        template: JST['actorDetailsTemplate'],
 
         initialize: function () {
 

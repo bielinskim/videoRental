@@ -5,7 +5,7 @@
         tagName: "div",
         className: "app-actions",
 
-        template: _.template($("#listActionsTemplate").html()),
+        template: JST['listActionsTemplate'],
 
         initialize: function(options) {
 

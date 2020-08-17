@@ -5,7 +5,7 @@
         tag: "div",
         className: "app-items-pagination",
 
-        template: _.template($("#listPaginationTemplate").html()),
+        template: JST['listPaginationTemplate'],
 
         initialize: function(options) {
 

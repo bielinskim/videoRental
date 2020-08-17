@@ -3,7 +3,7 @@
 
         tagName: "div",
 
-        template: _.template($("#categoryEditNewViewTemplate").html()),
+        template: JST['categoryEditNewViewTemplate'],
 
         initialize: function () {
 

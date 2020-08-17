@@ -1,0 +1,50 @@
+<% if(this.model.isNew()) { %>
+<h3 class="app-heading"><i class="fa fa-plus"></i> Nowy klient</h3>
+<% } else { %>
+<h3 class="app-heading"><i class="fa fa-edit"></i> Edycja klienta</h3>
+<% } %>
+<div class="app-form">
+    <form action="" id="new-movie">
+        <div class="app-form-field">
+            <label for="client-first-name">Imię</label>
+            <input type="text" id="client-first-name" value="" placeholder="Imię">
+        </div>
+
+        <div class="app-form-field">
+            <label for="client-last-name">Nazwisko</label>
+            <input type="text" id="client-last-name" class="short" placeholder="Nazwisko">
+        </div>
+
+        <div class="app-form-field">
+            <label for="client-birthdate">Data urodzenia</label>
+            <input type="text" class="medium" id="client-birthdate" placeholder="Data urodzenia">
+        </div>
+
+        <div class="app-form-field">
+            <label for="client-idc-number">Numer dowodu</label>
+            <input type="text" class="medium" id="client-idc-number" placeholder="Numer dowodu">
+        </div>
+
+        <div class="app-form-field">
+            <label for="client-address">Adres</label>
+            <input type="text" class="medium" id="client-address" placeholder="Adres">
+        </div>
+
+        <div class="app-form-field">
+            <label for="client-zip-code">Kod pocztowy</label>
+            <input type="text" class="medium" id="client-zip-code" placeholder="Kod pocztowy">
+        </div>
+
+        <div class="app-form-field">
+            <label for="client-city">Miasto</label>
+            <input type="text" class="medium" id="client-city" placeholder="Miasto">
+        </div>
+
+        <div class="app-form-submit">
+            <button type="submit" class="btn">Zapisz</button>
+            <% if(!this.model.isNew()) { %>
+            <button type="button" class="btn special delete">Usuń</button>
+            <% } %>
+        </div>
+    </form>
+</div>

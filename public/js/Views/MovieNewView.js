@@ -3,7 +3,7 @@
 
         tagName: "div",
 
-        template: _.template($("#movieEditNewViewTemplate").html()),
+        template: JST['movieEditNewViewTemplate'],
 
         initialize: function () {
 
