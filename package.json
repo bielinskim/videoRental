@@ -12,7 +12,7 @@
   "author": "Mateusz Bielinski",
   "license": "ISC",
   "dependencies": {
-    "async": "^3.2.0",
+    "async": "^3.2.2",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "mongodb": "^3.5.3"
